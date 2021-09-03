@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://withme.c5qigjn0tabn.ap-northeast-2.rds.amazonaws.com:3306/withme?serverTimezone=Asia/Seoul
+    username: admin
+    password: ENC(jbC1opLuHbcw+s4OIFqSDpHpIdmvM9sm)
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "test"
+server:
+  port: 8889
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+server:
+  port: 9999
