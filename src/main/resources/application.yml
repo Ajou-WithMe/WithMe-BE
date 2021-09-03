@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://withme.c5qigjn0tabn.ap-northeast-2.rds.amazonaws.com:3306/withme?serverTimezone=Asia/Seoul
+    url: ENC(YCfCLoIPjvK+J9BapEhGl0ziE40G2S505mE7y9bF3TEZd85eVXyQ6frALMwgw3N1oKoD2dOpSW1+5vFTynWbA1bU+MwC2upz4F9fjO7OTSp5iB4jjz+kp6sDd2n2DYkxoePKzB9B1faejXBnZ6BODw==)
     username: admin
-    password: ENC(jbC1opLuHbcw+s4OIFqSDpHpIdmvM9sm)
+    password: ENC(+ozeDPtMMKMg2CpvY4FHY/w8h2lyYUtb)
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -12,6 +12,9 @@ spring:
     hibernate:
       ddl-auto: update
 
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
 ---
 
 spring:
