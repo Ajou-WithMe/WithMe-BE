@@ -21,8 +21,7 @@ spring:
   config:
     activate:
       on-profile: "test"
-server:
-  port: 8889
+
 
 ---
 
@@ -30,5 +29,3 @@ spring:
   config:
     activate:
       on-profile: "prod"
-server:
-  port: 9999
