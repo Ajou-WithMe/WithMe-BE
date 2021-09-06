@@ -10,11 +10,11 @@ public class SignUpWithEmailDto {
     private String pwd;
     private String address;
 
-    public User toEntity(String saltedPwd) {
+    public User toEntity(String encodedPwd) {
         return User.builder()
                 .email(this.email)
                 .name(this.name)
-                .pwd(saltedPwd)
+                .pwd(encodedPwd)
                 .address(this.address)
                 .build();
     }
