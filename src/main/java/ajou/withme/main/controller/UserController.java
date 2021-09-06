@@ -1,5 +1,6 @@
 package ajou.withme.main.controller;
 
+import ajou.withme.main.Service.MailService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.LoginWithEmailDto;
@@ -8,15 +9,19 @@ import ajou.withme.main.util.ResFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, MailService mailService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = mailService;
     }
 
     @PostMapping("/signup/email")
@@ -28,6 +33,16 @@ public class UserController {
         User savedUser = userService.saveUser(user);
 
         return new ResFormat(true, 201L, savedUser);
+    }
+
+    @PostMapping("/signup/certification")
+    public ResFormat sendCertificationCode(@RequestParam String email) {
+        int start = (int) (Math.random() * 27);
+        String code = UUID.randomUUID().toString().replace("-", "").substring(start, start + 6);
+
+        mailService.sendMail(email, code);
+
+        return new ResFormat(true, 201L, code);
     }
 
     @PostMapping("signup/duplicate")

@@ -22,11 +22,16 @@ public class User {
     private Long id;
 
     private String name;
+
     private String email;
+
     private String pwd;
+
     private String address;
+
 //    type 0 : email, 1 : kakao
     private Long type;
+
     private String uid;
 
 
