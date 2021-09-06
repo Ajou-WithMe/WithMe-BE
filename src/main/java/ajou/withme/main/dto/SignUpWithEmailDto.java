@@ -3,6 +3,8 @@ package ajou.withme.main.dto;
 import ajou.withme.main.domain.User;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class SignUpWithEmailDto {
     private String name;
@@ -16,6 +18,8 @@ public class SignUpWithEmailDto {
                 .name(this.name)
                 .pwd(encodedPwd)
                 .address(this.address)
+                .type(0L)
+                .uid(UUID.randomUUID().toString())
                 .build();
     }
 }
