@@ -9,5 +9,5 @@ import lombok.Setter;
 public class ResFormat {
     private boolean success;
     private Long status;
-    private String data;
+    private Object data;
 }
