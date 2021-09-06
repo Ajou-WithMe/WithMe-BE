@@ -9,6 +9,7 @@ import ajou.withme.main.util.ResFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.UUID;
 
 @RestController
@@ -36,11 +37,9 @@ public class UserController {
     }
 
     @PostMapping("/signup/certification")
-    public ResFormat sendCertificationCode(@RequestParam String email) {
-        int start = (int) (Math.random() * 27);
-        String code = UUID.randomUUID().toString().replace("-", "").substring(start, start + 6);
+    public ResFormat sendCertificationCode(@RequestParam String email) throws MessagingException {
 
-        mailService.sendMail(email, code);
+        String code = mailService.sendCertificationCodeMail(email);
 
         return new ResFormat(true, 201L, code);
     }

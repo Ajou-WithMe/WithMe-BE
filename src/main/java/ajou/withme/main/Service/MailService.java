@@ -1,10 +1,13 @@
 package ajou.withme.main.Service;
 
-import org.springframework.mail.SimpleMailMessage;
+import ajou.withme.main.util.MailForm;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.util.UUID;
 
 @Service
 public class MailService {
@@ -14,30 +17,25 @@ public class MailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(String email, String code) {
+    public String sendCertificationCodeMail(String toEmail) throws MessagingException {
 
-        // 수신 대상을 담을 ArrayList 생성
-        ArrayList<String> toUserList = new ArrayList<>();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-        // 수신 대상 추가
-        toUserList.add(email);
+        int start = (int) (Math.random() * 27);
+        String code = UUID.randomUUID().toString().replace("-", "").substring(start, start + 6);
 
-        // 수신 대상 개수
-        int toUserSize = toUserList.size();
+        MailForm mailForm = new MailForm();
+        String mailContent = mailForm.getCertificationCodeMail(code);
 
-        // SimpleMailMessage (단순 텍스트 구성 메일 메시지 생성할 때 이용)
-        SimpleMailMessage simpleMessage = new SimpleMailMessage();
+        helper.setFrom("WithMe"); //보내는사람
+        helper.setTo(toEmail); //받는사람
+        helper.setSubject("[WithMe] 회원가입 이메일 인증코드"); //메일제목
+        helper.setText(mailContent, true); //ture넣을경우 html
 
-        // 수신자 설정
-        simpleMessage.setTo(toUserList.toArray(new String[toUserSize]));
 
-        // 메일 제목
-        simpleMessage.setSubject("Subject Sample");
+        javaMailSender.send(mimeMessage);
 
-        // 메일 내용
-        simpleMessage.setText(code);
-
-        // 메일 발송
-        javaMailSender.send(simpleMessage);
+        return code;
     }
 }
