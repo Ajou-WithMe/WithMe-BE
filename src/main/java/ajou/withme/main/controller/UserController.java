@@ -2,6 +2,7 @@ package ajou.withme.main.controller;
 
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
+import ajou.withme.main.dto.LoginWithEmailDto;
 import ajou.withme.main.dto.SignUpWithEmailDto;
 import ajou.withme.main.util.ResFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,8 +34,24 @@ public class UserController {
     public ResFormat isNotDuplicateEmail(@RequestParam String email) {
 
         User userByEmail = userService.findUserByEmail(email);
-        Boolean check = userByEmail == null;
+        boolean check = userByEmail == null;
 
         return new ResFormat(true, 200L, check);
+    }
+
+    @PostMapping("/login/email")
+    public ResFormat loginWithEmail(@RequestBody LoginWithEmailDto loginWithEmailDto) {
+
+        User userByEmail = userService.findUserByEmail(loginWithEmailDto.getEmail());
+        boolean isLogin = passwordEncoder.matches(loginWithEmailDto.getPwd(), userByEmail.getPwd());
+
+        if (isLogin) {
+            // login 성공
+            return new ResFormat(true, 201L, isLogin);
+        } else {
+            // login 실패
+            return new ResFormat(false, 400L, isLogin);
+
+        }
     }
 }
