@@ -38,4 +38,25 @@ public class MailService {
 
         return code;
     }
+
+    public String sendPwdCertification(String toEmail) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        int start = (int) (Math.random() * 27);
+        String code = UUID.randomUUID().toString().replace("-", "").substring(start, start + 6);
+
+        MailForm mailForm = new MailForm();
+        String mailContent = mailForm.getPwdCertificationMail(code);
+
+        helper.setFrom("WithMe"); //보내는사람
+        helper.setTo(toEmail); //받는사람
+        helper.setSubject("[WithMe] 비밀번호 찾기 인증코드"); //메일제목
+        helper.setText(mailContent, true); //ture넣을경우 html
+
+
+        javaMailSender.send(mimeMessage);
+
+        return code;
+    }
 }

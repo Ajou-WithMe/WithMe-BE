@@ -34,5 +34,7 @@ public class User {
 
     private String uid;
 
-
+    public void updatePwd(String pwd) {
+        this.pwd = pwd;
+    }
 }
