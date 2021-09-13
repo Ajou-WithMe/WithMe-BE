@@ -10,6 +10,7 @@ import ajou.withme.main.dto.user.SignUpWithEmailDto;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -53,6 +54,7 @@ public class UserController {
         return new ResFormat(true, 200L, check);
     }
 
+    @Transactional
     @PostMapping("/login/email")
     public ResFormat loginWithEmail(@RequestBody LoginWithEmailDto loginWithEmailDto) {
 
@@ -61,7 +63,7 @@ public class UserController {
 
         if (isLogin) {
             // login 성공
-            String accessToken = authService.createToken(userByEmail.getUid(), (long) (2 * 60 * 60 * 1000));
+            String accessToken = authService.createToken(userByEmail.getUid(), (long) (2  * 60 * 1000));
             String refreshToken = authService.createToken(userByEmail.getUid(), (long) ( 2 * 24 * 60 * 60 * 1000));
 
             Auth auth = authService.createAuth(refreshToken, userByEmail);

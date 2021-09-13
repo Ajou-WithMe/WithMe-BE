@@ -9,6 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Data
+@Getter
 public class Auth {
 
     @Id
@@ -20,4 +21,8 @@ public class Auth {
     @ManyToOne
     @JoinColumn
     private User user;
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

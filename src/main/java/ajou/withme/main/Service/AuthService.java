@@ -51,7 +51,7 @@ public class AuthService {
     public Claims getClaimsByToken(String token) {
         return Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRETKEY))
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
@@ -59,10 +59,10 @@ public class AuthService {
         try {
             getClaimsByToken(token);
             return true;
-        } catch (JwtException exception) {
-            // refresh
+        } catch (ExpiredJwtException exception) {
+            System.out.println("Token Expired UserID : " + exception.getClaims().getSubject());
             return false;
-        } catch (NullPointerException exception) {
+        } catch (JwtException | NullPointerException exception) {
             return false;
         }
     }
@@ -76,5 +76,21 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .user(user)
                 .build();
+    }
+
+    public String getExpiredSubject(String accessToken) {
+        try {
+            return getSubject(getClaimsByToken(accessToken));
+        } catch (ExpiredJwtException exception) {
+            return exception.getClaims().getSubject();
+        }
+    }
+
+    public Auth findAuthByRefreshToken(String refreshToken) {
+        return authRepository.findByRefreshToken(refreshToken);
+    }
+
+    public void deleteAuthByRefreshToken(String refreshToken) {
+        authRepository.deleteByRefreshToken(refreshToken);
     }
 }

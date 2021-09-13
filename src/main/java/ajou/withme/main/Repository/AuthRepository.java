@@ -8,4 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthRepository extends JpaRepository<Auth, Long> {
     void deleteByUser(User user);
+
+    void deleteByRefreshToken(String refreshToken);
+
+    Auth findByRefreshToken(String refreshToken);
 }
