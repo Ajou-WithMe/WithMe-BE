@@ -93,6 +93,16 @@ public class UserController {
         return new ResFormat(true, 201L, code);
     }
 
+    @PostMapping("/findEmail")
+    public ResFormat findEmail(@RequestParam String name, @RequestParam String phone){
+        User userByEmail = userService.findUserByNamePhone(name, phone);
+
+        if (userByEmail == null) {
+            return new ResFormat(false, 400L, "조회에 실패했습니다.");
+        }
+        return new ResFormat(true, 201L, userByEmail.getEmail());
+    }
+
     @PostMapping("/findPwd/changePwd")
     public ResFormat changePwdAfterCertification(@RequestParam String email, @RequestParam String pwd){
 

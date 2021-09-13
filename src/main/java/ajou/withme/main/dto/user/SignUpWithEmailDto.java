@@ -11,6 +11,7 @@ public class SignUpWithEmailDto {
     private String email;
     private String pwd;
     private String address;
+    private String phone;
 
     public User toEntity(String encodedPwd) {
         return User.builder()
@@ -18,6 +19,7 @@ public class SignUpWithEmailDto {
                 .name(this.name)
                 .pwd(encodedPwd)
                 .address(this.address)
+                .phone(this.phone)
                 .type(0L)
                 .uid(UUID.randomUUID().toString())
                 .build();

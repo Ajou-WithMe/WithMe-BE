@@ -23,4 +23,8 @@ public class UserService {
     public User findUserByUid(String uid) {
         return userRepository.findByUid(uid);
     }
+
+    public User findUserByNamePhone(String name, String phone) {
+        return userRepository.findByNamePhone(name, phone);
+    }
 }

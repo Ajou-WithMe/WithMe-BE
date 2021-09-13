@@ -29,6 +29,8 @@ public class User {
 
     private String address;
 
+    private String phone;
+
 //    type 0 : email, 1 : kakao
     private Long type;
 
