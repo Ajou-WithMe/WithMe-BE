@@ -94,7 +94,7 @@ public class UserController {
     }
 
     @PostMapping("/findPwd/changePwd")
-    public ResFormat changePwdAfterCertification(@RequestParam String email, @RequestParam String pwd) throws MessagingException {
+    public ResFormat changePwdAfterCertification(@RequestParam String email, @RequestParam String pwd){
 
         User userByEmail = userService.findUserByEmail(email);
         if (userByEmail == null) {
@@ -109,7 +109,7 @@ public class UserController {
     }
 
     @PostMapping("/mypage/changePwd")
-    public ResFormat changePwd(HttpServletRequest request, @RequestParam String pwd) throws MessagingException {
+    public ResFormat changePwd(HttpServletRequest request, @RequestParam String pwd){
         String uid = jwtTokenUtil.getSubject(request);
         User user = userService.findUserByUid(uid);
 
@@ -118,4 +118,27 @@ public class UserController {
         userService.saveUser(user);
         return new ResFormat(true, 201L, "비밀번호 변경을 완료했습니다.");
     }
+
+    @PostMapping("/mypage/changeName")
+    public ResFormat changeName(HttpServletRequest request, @RequestParam String name){
+        String uid = jwtTokenUtil.getSubject(request);
+        User user = userService.findUserByUid(uid);
+
+        user.updateName(name);
+
+        userService.saveUser(user);
+        return new ResFormat(true, 201L, "이름 변경을 완료했습니다.");
+    }
+
+    @PostMapping("/mypage/changeAddress")
+    public ResFormat changeAddress(HttpServletRequest request, @RequestParam String address){
+        String uid = jwtTokenUtil.getSubject(request);
+        User user = userService.findUserByUid(uid);
+
+        user.updateAddress(address);
+
+        userService.saveUser(user);
+        return new ResFormat(true, 201L, "주소 변경을 완료했습니다.");
+    }
+
 }

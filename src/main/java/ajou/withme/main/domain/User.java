@@ -37,4 +37,13 @@ public class User {
     public void updatePwd(String pwd) {
         this.pwd = pwd;
     }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateAddress(String addr) {
+        this.address = addr;
+    }
+
 }
