@@ -28,7 +28,7 @@ jasypt:
     bean: jasyptStringEncryptor
 
 KEY:
-  JWT: adsfasdf12341234
+  JWT: ENC(229MI3yAxXgZxvnOY5jG/NcoJ0bbb9uj)
 
 ---
 
