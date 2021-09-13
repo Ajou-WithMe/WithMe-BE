@@ -113,7 +113,8 @@ public class UserController {
         String uid = jwtTokenUtil.getSubject(request);
         User user = userService.findUserByUid(uid);
 
-        user.updatePwd(pwd);
+        String encodedPwd = passwordEncoder.encode(pwd);
+        user.updatePwd(encodedPwd);
 
         userService.saveUser(user);
         return new ResFormat(true, 201L, "비밀번호 변경을 완료했습니다.");
