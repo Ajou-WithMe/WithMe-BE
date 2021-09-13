@@ -26,6 +26,10 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+KEY:
+  JWT: adsfasdf12341234
+
 ---
 
 spring:

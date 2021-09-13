@@ -3,14 +3,13 @@ package ajou.withme.main.controller;
 import ajou.withme.main.Service.MailService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
-import ajou.withme.main.dto.LoginWithEmailDto;
-import ajou.withme.main.dto.SignUpWithEmailDto;
+import ajou.withme.main.dto.user.LoginWithEmailDto;
+import ajou.withme.main.dto.user.SignUpWithEmailDto;
 import ajou.withme.main.util.ResFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
