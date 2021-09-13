@@ -1,15 +1,14 @@
 package ajou.withme.main.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
-@RequiredArgsConstructor
-@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Data
 public class Auth {
 
     @Id

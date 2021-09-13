@@ -2,6 +2,7 @@ package ajou.withme.main.Service;
 
 import ajou.withme.main.Repository.AuthRepository;
 import ajou.withme.main.domain.Auth;
+import ajou.withme.main.domain.User;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,5 +65,16 @@ public class AuthService {
         } catch (NullPointerException exception) {
             return false;
         }
+    }
+
+    public void deleteAuthByUser(User user) {
+        authRepository.deleteByUser(user);
+    }
+
+    public Auth createAuth(String refreshToken, User user) {
+        return Auth.builder()
+                .refreshToken(refreshToken)
+                .user(user)
+                .build();
     }
 }
