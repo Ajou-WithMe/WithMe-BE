@@ -81,10 +81,7 @@ public class UserController {
     }
 
     @PostMapping("/findPwd")
-    public ResFormat findPwdCertification(HttpServletRequest request, @RequestParam String email) throws MessagingException {
-//        String uid = jwtTokenUtil.getSubject(request);
-//        User user = userService.findUserByUid(uid);
-
+    public ResFormat findPwdCertification(@RequestParam String email) throws MessagingException {
         User userByEmail = userService.findUserByEmail(email);
 
         if (userByEmail == null) {
@@ -108,6 +105,17 @@ public class UserController {
         userByEmail.updatePwd(encodedPwd);
 
         userService.saveUser(userByEmail);
+        return new ResFormat(true, 201L, "비밀번호 변경을 완료했습니다.");
+    }
+
+    @PostMapping("/mypage/changePwd")
+    public ResFormat changePwd(HttpServletRequest request, @RequestParam String pwd) throws MessagingException {
+        String uid = jwtTokenUtil.getSubject(request);
+        User user = userService.findUserByUid(uid);
+
+        user.updatePwd(pwd);
+
+        userService.saveUser(user);
         return new ResFormat(true, 201L, "비밀번호 변경을 완료했습니다.");
     }
 }
