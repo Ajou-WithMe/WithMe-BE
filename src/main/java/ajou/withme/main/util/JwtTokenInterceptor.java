@@ -24,30 +24,30 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 
         String accessToken = request.getHeader("AccessToken");
-        String refreshToken = request.getHeader("RefreshToken");
 
         if (accessToken != null) {
             if (authService.isValidToken(accessToken)) {
                 return true;
             } else {
                 String uid = authService.getExpiredSubject(accessToken);
-                Auth auth = authService.findAuthByRefreshToken(refreshToken);
+                Auth auth = authService.findAuthByAccessToken(accessToken);
+
+                if (!authService.isValidToken(auth.getRefreshToken())) {
+                    response.setContentType("application/json");
+                    response.getWriter().println("{\"success\":false,\"status\":401,\"data\":\"Unauthorized Token\"}");
+                    return false;
+                }
 
                 if (uid.equals(authService.getSubject(authService.getClaimsByToken(auth.getRefreshToken())))) {
-                    String newAccessToken = authService.createToken(uid, (long) (2 * 60 * 1000));
-                    String newRefreshToken = authService.createToken(uid, (long) (2 * 24 * 60 * 60 * 1000));
+                    String newAccessToken = authService.createToken(uid, (long) (2 * 60 * 60 * 1000));
+                    String newRefreshToken = authService.createToken(uid, (long) (14 * 24 * 60 * 60 * 1000));
 
-                    authService.deleteAuthByRefreshToken(refreshToken);
-                    Auth newAuth = authService.createAuth(newRefreshToken, auth.getUser());
+                    authService.deleteAuthByRefreshToken(auth.getRefreshToken());
+                    Auth newAuth = authService.createAuth(newAccessToken,newRefreshToken, auth.getUser());
                     authService.saveAuth(newAuth);
 
-                    System.out.println("14");
-
                     response.setHeader("AccessToken", newAccessToken);
-                    response.setHeader("RefreshToken", newRefreshToken);
                 }
-                System.out.println("15");
-
                 return true;
             }
         } else {

@@ -12,4 +12,6 @@ public interface AuthRepository extends JpaRepository<Auth, Long> {
     void deleteByRefreshToken(String refreshToken);
 
     Auth findByRefreshToken(String refreshToken);
+
+    Auth findByAccessToken(String accessToken);
 }

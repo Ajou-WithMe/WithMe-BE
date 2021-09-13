@@ -17,6 +17,7 @@ public class Auth {
     private Long id;
 
     private String refreshToken;
+    private String accessToken;
 
     @ManyToOne
     @JoinColumn

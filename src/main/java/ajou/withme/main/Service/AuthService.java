@@ -63,6 +63,7 @@ public class AuthService {
             System.out.println("Token Expired UserID : " + exception.getClaims().getSubject());
             return false;
         } catch (JwtException | NullPointerException exception) {
+            System.out.println("exception = " + exception);
             return false;
         }
     }
@@ -71,8 +72,9 @@ public class AuthService {
         authRepository.deleteByUser(user);
     }
 
-    public Auth createAuth(String refreshToken, User user) {
+    public Auth createAuth(String accessToken,String refreshToken, User user) {
         return Auth.builder()
+                .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .user(user)
                 .build();
@@ -86,8 +88,8 @@ public class AuthService {
         }
     }
 
-    public Auth findAuthByRefreshToken(String refreshToken) {
-        return authRepository.findByRefreshToken(refreshToken);
+    public Auth findAuthByAccessToken(String accessToken) {
+        return authRepository.findByAccessToken(accessToken);
     }
 
     public void deleteAuthByRefreshToken(String refreshToken) {

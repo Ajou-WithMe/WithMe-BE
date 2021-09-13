@@ -63,19 +63,15 @@ public class UserController {
 
         if (isLogin) {
             // login 성공
-            String accessToken = authService.createToken(userByEmail.getUid(), (long) (2  * 60 * 1000));
-            String refreshToken = authService.createToken(userByEmail.getUid(), (long) ( 2 * 24 * 60 * 60 * 1000));
+            String accessToken = authService.createToken(userByEmail.getUid(), (long) (2 * 60 * 60 * 1000));
+            String refreshToken = authService.createToken(userByEmail.getUid(), (long) (14 * 24 * 60 * 60 * 1000));
 
-            Auth auth = authService.createAuth(refreshToken, userByEmail);
+            Auth auth = authService.createAuth(accessToken, refreshToken, userByEmail);
 
             authService.deleteAuthByUser(userByEmail);
             authService.saveAuth(auth);
 
-            Map<String, Object> res = new LinkedHashMap<>();
-            res.put("accessToken", accessToken);
-            res.put("refreshToken", refreshToken);
-
-            return new ResFormat(true, 201L, res);
+            return new ResFormat(true, 201L, accessToken);
         } else {
             // login 실패
             return new ResFormat(false, 400L, "로그인에 실패하였습니다.");
