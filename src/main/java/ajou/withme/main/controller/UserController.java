@@ -7,6 +7,7 @@ import ajou.withme.main.domain.Auth;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.user.LoginWithEmailDto;
 import ajou.withme.main.dto.user.SignUpWithEmailDto;
+import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -25,6 +25,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final AuthService authService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/signup/email")
     public ResFormat signUpWithEmail(@RequestBody SignUpWithEmailDto signUpWithEmailDto) {
@@ -45,7 +46,7 @@ public class UserController {
         return new ResFormat(true, 201L, code);
     }
 
-    @PostMapping("signup/duplicate")
+    @PostMapping("/signup/duplicate")
     public ResFormat isNotDuplicateEmail(@RequestParam String email) {
 
         User userByEmail = userService.findUserByEmail(email);
@@ -63,8 +64,8 @@ public class UserController {
 
         if (isLogin) {
             // login 성공
-            String accessToken = authService.createToken(userByEmail.getUid(), (long) (2 * 60 * 60 * 1000));
-            String refreshToken = authService.createToken(userByEmail.getUid(), (long) (14 * 24 * 60 * 60 * 1000));
+            String accessToken = authService.createToken(userByEmail.getUid(), (2L * 60 * 60 * 1000));
+            String refreshToken = authService.createToken(userByEmail.getUid(), (14L * 24 * 60 * 60 * 1000));
 
             Auth auth = authService.createAuth(accessToken, refreshToken, userByEmail);
 
@@ -77,5 +78,12 @@ public class UserController {
             return new ResFormat(false, 400L, "로그인에 실패하였습니다.");
 
         }
+    }
+
+    @PostMapping("/findPwd")
+    public ResFormat findPwdCertification(HttpServletRequest request) {
+        String subject = jwtTokenUtil.getSubject(request);
+
+        return null;
     }
 }
