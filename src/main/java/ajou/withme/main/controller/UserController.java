@@ -155,4 +155,15 @@ public class UserController {
         return new ResFormat(true, 201L, "주소 변경을 완료했습니다.");
     }
 
+    @PostMapping("/mypage/changePhone")
+    public ResFormat changePhone(HttpServletRequest request, @RequestParam String phone){
+        String uid = jwtTokenUtil.getSubject(request);
+        User user = userService.findUserByUid(uid);
+
+        user.updatePhone(phone);
+
+        userService.saveUser(user);
+        return new ResFormat(true, 201L, "휴대폰 번호 변경을 완료했습니다.");
+    }
+
 }
