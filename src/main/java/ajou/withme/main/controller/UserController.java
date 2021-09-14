@@ -60,6 +60,9 @@ public class UserController {
     public ResFormat loginWithEmail(@RequestBody LoginWithEmailDto loginWithEmailDto) {
 
         User userByEmail = userService.findUserByEmail(loginWithEmailDto.getEmail());
+        if (userByEmail == null) {
+            return new ResFormat(false, 400L, "등록되지 않은 이메일입니다.");
+        }
         boolean isLogin = passwordEncoder.matches(loginWithEmailDto.getPwd(), userByEmail.getPwd());
 
         if (isLogin) {
@@ -75,12 +78,12 @@ public class UserController {
             return new ResFormat(true, 201L, accessToken);
         } else {
             // login 실패
-            return new ResFormat(false, 400L, "로그인에 실패하였습니다.");
+            return new ResFormat(false, 400L, "비밀번호가 일치하지 않습니다.");
 
         }
     }
 
-    @PostMapping("/findPwd")
+    @PostMapping("/login/findPwd")
     public ResFormat findPwdCertification(@RequestParam String email) throws MessagingException {
         User userByEmail = userService.findUserByEmail(email);
 
@@ -93,7 +96,7 @@ public class UserController {
         return new ResFormat(true, 201L, code);
     }
 
-    @PostMapping("/findEmail")
+    @PostMapping("/login/findEmail")
     public ResFormat findEmail(@RequestParam String name, @RequestParam String phone){
         User userByEmail = userService.findUserByNamePhone(name, phone);
 
@@ -103,7 +106,7 @@ public class UserController {
         return new ResFormat(true, 201L, userByEmail.getEmail());
     }
 
-    @PostMapping("/findPwd/changePwd")
+    @PostMapping("/login/findPwd/changePwd")
     public ResFormat changePwdAfterCertification(@RequestParam String email, @RequestParam String pwd){
 
         User userByEmail = userService.findUserByEmail(email);
