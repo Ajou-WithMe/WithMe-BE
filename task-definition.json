@@ -25,18 +25,18 @@
       "command": null,
       "linuxParameters": null,
       "cpu": 0,
-      "environment": [
-        {
-          "name": "JAVA_OPTS",
-          "valueFrom": "arn:aws:secretsmanager:ap-northeast-2:379323745763:secret:ecsEnv-WgaI6V"
-        }
-      ],
+      "environment": [],
       "resourceRequirements": null,
       "ulimits": null,
       "dnsServers": null,
       "mountPoints": [],
       "workingDirectory": null,
-      "secrets": null,
+      "secrets": [
+        {
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-2:379323745763:secret:ecsEnv-WgaI6V",
+          "name": "JAVA_OPTS"
+        }
+      ],
       "dockerSecurityOptions": null,
       "memory": null,
       "memoryReservation": 256,
