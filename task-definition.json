@@ -1,6 +1,6 @@
 {
   "ipcMode": null,
-  "executionRoleArn": "arn:aws:iam::379323745763:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::379323745763:role/ecsTaskExecutionWithSecretsRole",
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
@@ -28,7 +28,7 @@
       "environment": [
         {
           "name": "JAVA_OPTS",
-          "value": "-Djasypt.encryptor.password=tttt"
+          "value": "arn:aws:secretsmanager:ap-northeast-2:379323745763:secret:ecsEnv-WgaI6V"
         }
       ],
       "resourceRequirements": null,
