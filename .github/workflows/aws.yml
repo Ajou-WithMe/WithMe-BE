@@ -64,9 +64,9 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: $
         ECR_REPOSITORY: withme
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: $
       run: |
         # Build a docker container and
         # push it to ECR so that it can
@@ -81,12 +81,12 @@ jobs:
       with:
         task-definition: task-definition.json
         container-name: withme-container
-        image: ${{ steps.build-image.outputs.image }}
+        image: $
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        task-definition: $
         service: test-env
         cluster: withMe
         wait-for-service-stability: true
