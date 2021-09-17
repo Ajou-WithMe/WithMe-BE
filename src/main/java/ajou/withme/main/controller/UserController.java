@@ -6,7 +6,9 @@ import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.Auth;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.user.LoginWithEmailDto;
+import ajou.withme.main.dto.user.LoginWithKakaoDto;
 import ajou.withme.main.dto.user.SignUpWithEmailDto;
+import ajou.withme.main.dto.user.SignUpWithKakaoDto;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,16 @@ public class UserController {
         return new ResFormat(true, 201L, savedUser);
     }
 
+    @PostMapping("/signup/kakao")
+    public ResFormat signUpWithKakao(@RequestBody SignUpWithKakaoDto signUpWithKakaoDto) {
+
+        User user = signUpWithKakaoDto.toEntity();
+
+        User savedUser = userService.saveUser(user);
+
+        return new ResFormat(true, 201L, savedUser);
+    }
+
     @PostMapping("/signup/certification")
     public ResFormat sendCertificationCode(@RequestParam String email) throws MessagingException {
 
@@ -50,6 +62,15 @@ public class UserController {
     public ResFormat isNotDuplicateEmail(@RequestParam String email) {
 
         User userByEmail = userService.findUserByEmail(email);
+        boolean check = userByEmail == null;
+
+        return new ResFormat(true, 200L, check);
+    }
+
+    @PostMapping("/signup/existUser")
+    public ResFormat isNotExistUser(@RequestParam String uid) {
+
+        User userByEmail = userService.findUserByUid(uid);
         boolean check = userByEmail == null;
 
         return new ResFormat(true, 200L, check);
@@ -81,6 +102,27 @@ public class UserController {
             return new ResFormat(false, 400L, "비밀번호가 일치하지 않습니다.");
 
         }
+    }
+
+    @Transactional
+    @PostMapping("/login/kakao")
+    public ResFormat loginWithKakao(@RequestBody LoginWithKakaoDto loginWithKakaoDto) {
+
+        User userByUid = userService.findUserByUid(loginWithKakaoDto.getUid());
+        if (userByUid == null) {
+            return new ResFormat(false, 400L, "등록되지 않은 이메일입니다.");
+        }
+
+        // login 성공
+        String accessToken = authService.createToken(loginWithKakaoDto.getUid(), (2L * 60 * 60 * 1000));
+        String refreshToken = authService.createToken(loginWithKakaoDto.getUid(), (30L * 24 * 60 * 60 * 1000));
+
+        Auth auth = authService.createAuth(accessToken, refreshToken, userByUid);
+
+        authService.deleteAuthByUser(userByUid);
+        authService.saveAuth(auth);
+
+        return new ResFormat(true, 201L, accessToken);
     }
 
     @PostMapping("/login/findPwd")
