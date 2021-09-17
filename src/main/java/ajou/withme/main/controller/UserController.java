@@ -6,7 +6,9 @@ import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.Auth;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.user.LoginWithEmailDto;
+import ajou.withme.main.dto.user.LoginWithKakaoDto;
 import ajou.withme.main.dto.user.SignUpWithEmailDto;
+import ajou.withme.main.dto.user.SignUpWithKakaoDto;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,16 @@ public class UserController {
         return new ResFormat(true, 201L, savedUser);
     }
 
+    @PostMapping("/signup/kakao")
+    public ResFormat signUpWithKakao(@RequestBody SignUpWithKakaoDto signUpWithKakaoDto) {
+
+        User user = signUpWithKakaoDto.toEntity();
+
+        User savedUser = userService.saveUser(user);
+
+        return new ResFormat(true, 201L, savedUser);
+    }
+
     @PostMapping("/signup/certification")
     public ResFormat sendCertificationCode(@RequestParam String email) throws MessagingException {
 
@@ -55,11 +67,23 @@ public class UserController {
         return new ResFormat(true, 200L, check);
     }
 
+    @PostMapping("/signup/existUser")
+    public ResFormat isNotExistUser(@RequestParam String uid) {
+
+        User userByEmail = userService.findUserByUid(uid);
+        boolean check = userByEmail == null;
+
+        return new ResFormat(true, 200L, check);
+    }
+
     @Transactional
     @PostMapping("/login/email")
     public ResFormat loginWithEmail(@RequestBody LoginWithEmailDto loginWithEmailDto) {
 
         User userByEmail = userService.findUserByEmail(loginWithEmailDto.getEmail());
+        if (userByEmail == null) {
+            return new ResFormat(false, 400L, "등록되지 않은 이메일입니다.");
+        }
         boolean isLogin = passwordEncoder.matches(loginWithEmailDto.getPwd(), userByEmail.getPwd());
 
         if (isLogin) {
@@ -75,12 +99,33 @@ public class UserController {
             return new ResFormat(true, 201L, accessToken);
         } else {
             // login 실패
-            return new ResFormat(false, 400L, "로그인에 실패하였습니다.");
+            return new ResFormat(false, 400L, "비밀번호가 일치하지 않습니다.");
 
         }
     }
 
-    @PostMapping("/findPwd")
+    @Transactional
+    @PostMapping("/login/kakao")
+    public ResFormat loginWithKakao(@RequestBody LoginWithKakaoDto loginWithKakaoDto) {
+
+        User userByUid = userService.findUserByUid(loginWithKakaoDto.getUid());
+        if (userByUid == null) {
+            return new ResFormat(false, 400L, "등록되지 않은 이메일입니다.");
+        }
+
+        // login 성공
+        String accessToken = authService.createToken(loginWithKakaoDto.getUid(), (2L * 60 * 60 * 1000));
+        String refreshToken = authService.createToken(loginWithKakaoDto.getUid(), (30L * 24 * 60 * 60 * 1000));
+
+        Auth auth = authService.createAuth(accessToken, refreshToken, userByUid);
+
+        authService.deleteAuthByUser(userByUid);
+        authService.saveAuth(auth);
+
+        return new ResFormat(true, 201L, accessToken);
+    }
+
+    @PostMapping("/login/findPwd")
     public ResFormat findPwdCertification(@RequestParam String email) throws MessagingException {
         User userByEmail = userService.findUserByEmail(email);
 
@@ -93,7 +138,7 @@ public class UserController {
         return new ResFormat(true, 201L, code);
     }
 
-    @PostMapping("/findEmail")
+    @PostMapping("/login/findEmail")
     public ResFormat findEmail(@RequestParam String name, @RequestParam String phone){
         User userByEmail = userService.findUserByNamePhone(name, phone);
 
@@ -103,7 +148,7 @@ public class UserController {
         return new ResFormat(true, 201L, userByEmail.getEmail());
     }
 
-    @PostMapping("/findPwd/changePwd")
+    @PostMapping("/login/findPwd/changePwd")
     public ResFormat changePwdAfterCertification(@RequestParam String email, @RequestParam String pwd){
 
         User userByEmail = userService.findUserByEmail(email);
@@ -150,6 +195,17 @@ public class UserController {
 
         userService.saveUser(user);
         return new ResFormat(true, 201L, "주소 변경을 완료했습니다.");
+    }
+
+    @PostMapping("/mypage/changePhone")
+    public ResFormat changePhone(HttpServletRequest request, @RequestParam String phone){
+        String uid = jwtTokenUtil.getSubject(request);
+        User user = userService.findUserByUid(uid);
+
+        user.updatePhone(phone);
+
+        userService.saveUser(user);
+        return new ResFormat(true, 201L, "휴대폰 번호 변경을 완료했습니다.");
     }
 
 }

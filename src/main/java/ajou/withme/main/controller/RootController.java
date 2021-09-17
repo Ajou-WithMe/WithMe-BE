@@ -13,6 +13,6 @@ public class RootController {
     public String mainpage(HttpSession httpSession)
     {
         log.error(httpSession.getId());
-        return "Getting Index Success";
+        return "Getting Index Success and success ecs actions deploy";
     }
 }
