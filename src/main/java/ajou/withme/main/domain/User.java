@@ -48,4 +48,7 @@ public class User {
         this.address = addr;
     }
 
+    public void updatePhone(String phone) {
+        this.phone = phone;
+    }
 }
