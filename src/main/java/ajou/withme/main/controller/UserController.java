@@ -55,6 +55,15 @@ public class UserController {
         return new ResFormat(true, 200L, check);
     }
 
+    @PostMapping("/signup/existUser")
+    public ResFormat isNotExistUser(@RequestParam String uid) {
+
+        User userByEmail = userService.findUserByUid(uid);
+        boolean check = userByEmail == null;
+
+        return new ResFormat(true, 200L, check);
+    }
+
     @Transactional
     @PostMapping("/login/email")
     public ResFormat loginWithEmail(@RequestBody LoginWithEmailDto loginWithEmailDto) {
