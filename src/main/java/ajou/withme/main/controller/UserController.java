@@ -7,6 +7,7 @@ import ajou.withme.main.domain.Auth;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.user.LoginWithEmailDto;
 import ajou.withme.main.dto.user.SignUpWithEmailDto;
+import ajou.withme.main.dto.user.SignUpWithKakaoDto;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,16 @@ public class UserController {
 
         String encodedPwd = passwordEncoder.encode(signUpWithEmailDto.getPwd());
         User user = signUpWithEmailDto.toEntity(encodedPwd);
+
+        User savedUser = userService.saveUser(user);
+
+        return new ResFormat(true, 201L, savedUser);
+    }
+
+    @PostMapping("/signup/kakao")
+    public ResFormat signUpWithKakao(@RequestBody SignUpWithKakaoDto signUpWithKakaoDto) {
+
+        User user = signUpWithKakaoDto.toEntity();
 
         User savedUser = userService.saveUser(user);
 
