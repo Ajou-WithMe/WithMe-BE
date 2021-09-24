@@ -7,11 +7,11 @@ import java.util.UUID;
 
 @Data
 public class SignUpWithEmailDto {
-    private final String name;
-    private final String email;
-    private final String pwd;
-    private final String address;
-    private final String phone;
+    private String name;
+    private String email;
+    private String pwd;
+    private String address;
+    private String phone;
 
     public User toEntity(String encodedPwd) {
         return User.builder()

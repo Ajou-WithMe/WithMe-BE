@@ -3,7 +3,7 @@ package ajou.withme.main.dto.user;
 import lombok.Data;
 
 @Data
-public class LoginWithEmailDto {
+public class ChangePwdDtoInLogin {
     private String email;
     private String pwd;
 }

@@ -4,6 +4,8 @@ import ajou.withme.main.Service.AuthService;
 import ajou.withme.main.Service.MailService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
+import ajou.withme.main.dto.user.ChangeProfileDto;
+import ajou.withme.main.dto.user.UserPwdDto;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,44 @@ public class MyPageController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/mypage/changePwd")
-    public ResFormat changePwd(HttpServletRequest request, @RequestParam String pwd){
+    // pwd랑 나머지 개인정보 변경으로 묶어서 관리
+    // 현재 개인정보 보는 기능 필요함
+    // 1. pwd 변경, 2. 개인정보 확인, 3. 개인정보 변경
+
+    @PostMapping("/mypage")
+    public ResFormat changeProfile(HttpServletRequest request, @RequestBody ChangeProfileDto changeProfileDto) {
         String uid = jwtTokenUtil.getSubject(request);
         User user = userService.findUserByUid(uid);
 
-        String encodedPwd = passwordEncoder.encode(pwd);
+        if (changeProfileDto.getName() != null) {
+            user.updateName(changeProfileDto.getName());
+        }
+        if (changeProfileDto.getPhone() != null) {
+            user.updatePhone(changeProfileDto.getPhone());
+        }
+        if (changeProfileDto.getAddress() != null) {
+            user.updateAddress(changeProfileDto.getAddress());
+        }
+
+        userService.saveUser(user);
+        return new ResFormat(true, 201L, "프로필 변경을 완료했습니다.");
+
+    }
+
+    @GetMapping("/mypage")
+    public ResFormat getMyPropile(HttpServletRequest request) {
+        String uid = jwtTokenUtil.getSubject(request);
+        User user = userService.findUserByUid(uid);
+
+        return new ResFormat(true, 200L, user);
+    }
+    
+    @PostMapping("/mypage/changePwd")
+    public ResFormat changePwd(HttpServletRequest request, @RequestBody UserPwdDto userPwdDto){
+        String uid = jwtTokenUtil.getSubject(request);
+        User user = userService.findUserByUid(uid);
+
+        String encodedPwd = passwordEncoder.encode(userPwdDto.getPwd());
         user.updatePwd(encodedPwd);
 
         userService.saveUser(user);

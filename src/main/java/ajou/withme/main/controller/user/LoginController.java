@@ -96,7 +96,7 @@ public class LoginController {
     }
 
     @PostMapping("/login/findPwd/changePwd")
-    public ResFormat changePwdAfterCertification(@RequestBody ChangePwdDto changePwdDto){
+    public ResFormat changePwdAfterCertification(@RequestBody ChangePwdDtoInLogin changePwdDto){
 
         User userByEmail = userService.findUserByEmail(changePwdDto.getEmail());
         if (userByEmail == null) {
