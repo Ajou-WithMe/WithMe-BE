@@ -5,8 +5,7 @@ import ajou.withme.main.Service.MailService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.Auth;
 import ajou.withme.main.domain.User;
-import ajou.withme.main.dto.user.LoginWithEmailDto;
-import ajou.withme.main.dto.user.LoginWithKakaoDto;
+import ajou.withme.main.dto.user.*;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -74,21 +73,21 @@ public class LoginController {
     }
 
     @PostMapping("/login/findPwd")
-    public ResFormat findPwdCertification(@RequestParam String email) throws MessagingException {
-        User userByEmail = userService.findUserByEmail(email);
+    public ResFormat findPwdCertification(@RequestBody UserEmailDto userEmailDto) throws MessagingException {
+        User userByEmail = userService.findUserByEmail(userEmailDto.getEmail());
 
         if (userByEmail == null) {
             return new ResFormat(false, 400L, "등록되지 않은 이메일입니다.");
         }
 
-        String code = mailService.sendPwdCertification(email);
+        String code = mailService.sendPwdCertification(userEmailDto.getEmail());
 
         return new ResFormat(true, 201L, code);
     }
 
     @PostMapping("/login/findEmail")
-    public ResFormat findEmail(@RequestParam String name, @RequestParam String phone){
-        User userByEmail = userService.findUserByNamePhone(name, phone);
+    public ResFormat findEmail(@RequestBody FindEmailDto findEmailDto){
+        User userByEmail = userService.findUserByNamePhone(findEmailDto.getName(), findEmailDto.getPhone());
 
         if (userByEmail == null) {
             return new ResFormat(false, 400L, "조회에 실패했습니다.");
@@ -97,14 +96,14 @@ public class LoginController {
     }
 
     @PostMapping("/login/findPwd/changePwd")
-    public ResFormat changePwdAfterCertification(@RequestParam String email, @RequestParam String pwd){
+    public ResFormat changePwdAfterCertification(@RequestBody ChangePwdDto changePwdDto){
 
-        User userByEmail = userService.findUserByEmail(email);
+        User userByEmail = userService.findUserByEmail(changePwdDto.getEmail());
         if (userByEmail == null) {
             return new ResFormat(false, 400L, "등록되지 않은 이메일입니다.");
         }
 
-        String encodedPwd = passwordEncoder.encode(pwd);
+        String encodedPwd = passwordEncoder.encode(changePwdDto.getPwd());
         userByEmail.updatePwd(encodedPwd);
 
         userService.saveUser(userByEmail);

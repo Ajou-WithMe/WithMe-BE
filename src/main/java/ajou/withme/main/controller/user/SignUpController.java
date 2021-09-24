@@ -5,6 +5,8 @@ import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.user.SignUpWithEmailDto;
 import ajou.withme.main.dto.user.SignUpWithKakaoDto;
+import ajou.withme.main.dto.user.UserEmailDto;
+import ajou.withme.main.dto.user.UserUidDto;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,26 +44,26 @@ public class SignUpController {
     }
 
     @PostMapping("/signup/certification")
-    public ResFormat sendCertificationCode(@RequestParam String email) throws MessagingException {
+    public ResFormat sendCertificationCode(@RequestBody UserEmailDto userEmailDto) throws MessagingException {
 
-        String code = mailService.sendCertificationCodeMail(email);
+        String code = mailService.sendCertificationCodeMail(userEmailDto.getEmail());
 
         return new ResFormat(true, 201L, code);
     }
 
     @PostMapping("/signup/duplicate")
-    public ResFormat isNotDuplicateEmail(@RequestParam String email) {
+    public ResFormat isNotDuplicateEmail(@RequestBody UserEmailDto userEmailDto) {
 
-        User userByEmail = userService.findUserByEmail(email);
+        User userByEmail = userService.findUserByEmail(userEmailDto.getEmail());
         boolean check = userByEmail == null;
 
         return new ResFormat(true, 200L, check);
     }
 
     @PostMapping("/signup/existUser")
-    public ResFormat isNotExistUser(@RequestParam String uid) {
+    public ResFormat isNotExistUser(@RequestBody UserUidDto userUidDto) {
 
-        User userByEmail = userService.findUserByUid(uid);
+        User userByEmail = userService.findUserByUid(userUidDto.getUid());
         boolean check = userByEmail == null;
 
         return new ResFormat(true, 200L, check);
