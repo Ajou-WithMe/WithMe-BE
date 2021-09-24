@@ -5,10 +5,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class MainApplicationTests {
-//
-//	static {
-//		System.setProperty("jasypt.encryptor.password","tttt");
-//	}
 
 	@Test
 	void contextLoads() {
