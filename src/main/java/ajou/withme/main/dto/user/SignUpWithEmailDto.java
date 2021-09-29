@@ -20,6 +20,7 @@ public class SignUpWithEmailDto {
                 .pwd(encodedPwd)
                 .address(this.address)
                 .phone(this.phone)
+                .profileImg(null)
                 .type(0L)
                 .uid(UUID.randomUUID().toString())
                 .build();

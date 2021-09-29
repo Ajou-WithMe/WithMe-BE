@@ -40,6 +40,9 @@ public class MyPageController {
         if (changeProfileDto.getAddress() != null) {
             user.updateAddress(changeProfileDto.getAddress());
         }
+        if (changeProfileDto.getProfileImg() != null) {
+            user.updateProfileImg(changeProfileDto.getProfileImg());
+        }
 
         userService.saveUser(user);
         return new ResFormat(true, 201L, "프로필 변경을 완료했습니다.");
