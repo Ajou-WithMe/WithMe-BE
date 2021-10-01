@@ -29,6 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
         List<String> excludePaths = new LinkedList<>();
         excludePaths.add("/user/signup/**");
         excludePaths.add("/user/login/**");
+        excludePaths.add("/daum.html");
         excludePaths.add("/");
         registry.addInterceptor(jwtTokenInterceptor).addPathPatterns("/**")
                 .excludePathPatterns(excludePaths);

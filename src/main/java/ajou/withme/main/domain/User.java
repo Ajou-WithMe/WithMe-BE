@@ -31,9 +31,9 @@ public class User {
 
     private String phone;
 
-//    type 0 : email, 1 : kakao
+//    type 0 : email, 1 : kakao, 2 : 피보호자
     private Long type;
-
+    
     private String uid;
 
     public void updatePwd(String pwd) {
