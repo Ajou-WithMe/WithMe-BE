@@ -23,6 +23,23 @@ spring:
           auth: true
           starttls:
             enable: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(3Z+OyRTPBuFTVmqz+9KeT/jOjsgcGCdH9J+w1JmR12k=)
+      secretKey: ENC(cwKingEYIkfICpt6YiuDjDGWfmuyC8vGP29ZOsa4cD2WzwFYVfo5xXWxWjvAykgGMTn+wTNzE4g=)
+    s3:
+      bucket: withme-s3
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor

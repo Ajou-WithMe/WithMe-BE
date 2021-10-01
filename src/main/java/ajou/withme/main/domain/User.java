@@ -33,7 +33,9 @@ public class User {
 
 //    type 0 : email, 1 : kakao, 2 : 피보호자
     private Long type;
-    
+
+    private String profileImg;
+
     private String uid;
 
     public void updatePwd(String pwd) {
@@ -50,5 +52,9 @@ public class User {
 
     public void updatePhone(String phone) {
         this.phone = phone;
+    }
+
+    public void updateProfileImg(String profileImg) {
+        this.profileImg = profileImg;
     }
 }
