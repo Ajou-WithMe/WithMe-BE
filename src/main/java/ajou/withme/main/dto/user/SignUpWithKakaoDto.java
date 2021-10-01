@@ -17,6 +17,7 @@ public class SignUpWithKakaoDto {
                 .phone(this.phone)
                 .type(1L)
                 .uid(this.uid)
+                .profileImg(null)
                 .build();
     }
 }

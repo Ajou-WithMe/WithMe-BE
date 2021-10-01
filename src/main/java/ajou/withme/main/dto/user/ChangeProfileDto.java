@@ -9,4 +9,6 @@ public class ChangeProfileDto {
     private String address;
 
     private String phone;
+
+    private String profileImg;
 }
