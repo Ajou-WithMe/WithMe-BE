@@ -46,6 +46,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
                     Auth newAuth = authService.createAuth(newAccessToken,newRefreshToken, auth.getUser());
                     authService.saveAuth(newAuth);
 
+                    request.setAttribute("uid", auth.getUser().getUid());
                     response.setHeader("AccessToken", newAccessToken);
                 }
                 return true;
