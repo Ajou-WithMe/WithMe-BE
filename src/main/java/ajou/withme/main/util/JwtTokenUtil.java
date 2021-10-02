@@ -14,9 +14,13 @@ public class JwtTokenUtil {
     private final AuthService authService;
 
     public String getSubject(HttpServletRequest request) {
-        String accessToken = request.getHeader("AccessToken");
-        Claims claimsByToken = authService.getClaimsByToken(accessToken);
-
-        return authService.getSubject(claimsByToken);
+        String uid = (String) request.getAttribute("uid");
+        if (uid != null) {
+            return uid;
+        } else {
+            String accessToken = request.getHeader("AccessToken");
+            Claims claimsByToken = authService.getClaimsByToken(accessToken);
+            return authService.getSubject(claimsByToken);
+        }
     }
 }
