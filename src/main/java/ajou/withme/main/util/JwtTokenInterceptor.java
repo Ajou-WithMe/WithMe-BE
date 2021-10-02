@@ -39,7 +39,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
                 }
 
                 if (uid.equals(authService.getSubject(authService.getClaimsByToken(auth.getRefreshToken())))) {
-                    String newAccessToken = authService.createToken(uid, (long) (2 * 60 * 60 * 1000));
+                    String newAccessToken = authService.createToken(uid, (long) (5 * 60 * 1000));
                     String newRefreshToken = authService.createToken(uid, (long) (14 * 24 * 60 * 60 * 1000));
 
                     authService.deleteAuthByRefreshToken(auth.getRefreshToken());

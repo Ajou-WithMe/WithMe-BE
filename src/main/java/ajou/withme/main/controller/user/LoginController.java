@@ -35,7 +35,7 @@ public class LoginController {
 
         if (isLogin) {
             // login 성공
-            String accessToken = authService.createToken(userByEmail.getUid(), (2 * 60 * 60L* 1000));
+            String accessToken = authService.createToken(userByEmail.getUid(), (5 * 60L* 1000));
             String refreshToken = authService.createToken(userByEmail.getUid(), (30L * 24 * 60 * 60 * 1000));
 
             Auth auth = authService.createAuth(accessToken, refreshToken, userByEmail);
