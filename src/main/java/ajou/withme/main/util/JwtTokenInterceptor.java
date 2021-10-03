@@ -32,6 +32,12 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
                 String uid = authService.getExpiredSubject(accessToken);
                 Auth auth = authService.findAuthByAccessToken(accessToken);
 
+                if (auth == null) {
+                    response.setContentType("application/json");
+                    response.getWriter().println("{\"success\":false,\"status\":401,\"data\":\"Unauthorized Token\"}");
+                    return false;
+                }
+
                 if (!authService.isValidToken(auth.getRefreshToken())) {
                     response.setContentType("application/json");
                     response.getWriter().println("{\"success\":false,\"status\":401,\"data\":\"Unauthorized Token\"}");
