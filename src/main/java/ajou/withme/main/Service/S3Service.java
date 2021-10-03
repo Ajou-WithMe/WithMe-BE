@@ -1,6 +1,7 @@
 package ajou.withme.main.Service;
 
 
+import ajou.withme.main.util.ResFormat;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -10,12 +11,18 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 @NoArgsConstructor
@@ -48,9 +55,28 @@ public class S3Service {
         String fileName = path + file.getOriginalFilename();
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(file.getContentType());
+        String contentType = file.getContentType();
+        objectMetadata.setContentType(contentType);
 
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), objectMetadata)
+        assert contentType != null;
+        String[] split = contentType.split("/");
+
+        if (!split[0].equals("image")) {
+            return "false";
+        }
+
+        InputStream inputStream = file.getInputStream();
+        BufferedImage originalImg = ImageIO.read(inputStream);
+
+        BufferedImage resize = Scalr.resize(originalImg, 1280);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        ImageIO.write(resize, split[1], baos);
+        InputStream newInput = new ByteArrayInputStream(baos.toByteArray());
+
+
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, newInput, objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();
     }
