@@ -1,11 +1,10 @@
 package ajou.withme.main.controller.user;
 
-import ajou.withme.main.Service.AuthService;
-import ajou.withme.main.Service.MailService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
-import ajou.withme.main.dto.user.ChangeProfileDto;
-import ajou.withme.main.dto.user.UserPwdDto;
+import ajou.withme.main.dto.user.request.ChangeProfileDto;
+import ajou.withme.main.dto.user.request.UserPwdDto;
+import ajou.withme.main.dto.user.response.GetMyProfileResponse;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +53,7 @@ public class MyPageController {
         String uid = jwtTokenUtil.getSubject(request);
         User user = userService.findUserByUid(uid);
 
-        return new ResFormat(true, 200L, user);
+        return new ResFormat(true, 200L, new GetMyProfileResponse(user.getName(), user.getEmail(), user.getAddress(), user.getPhone(), user.getType(), user.getProfileImg()));
     }
     
     @PostMapping("/mypage/changePwd")
