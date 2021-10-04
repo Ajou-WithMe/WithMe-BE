@@ -3,10 +3,10 @@ package ajou.withme.main.controller.user;
 import ajou.withme.main.Service.MailService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
-import ajou.withme.main.dto.user.SignUpWithEmailDto;
-import ajou.withme.main.dto.user.SignUpWithKakaoDto;
-import ajou.withme.main.dto.user.UserEmailDto;
-import ajou.withme.main.dto.user.UserUidDto;
+import ajou.withme.main.dto.user.request.SignUpWithEmailDto;
+import ajou.withme.main.dto.user.request.SignUpWithKakaoDto;
+import ajou.withme.main.dto.user.request.UserEmailDto;
+import ajou.withme.main.dto.user.request.UserUidDto;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +30,7 @@ public class SignUpController {
 
         User savedUser = userService.saveUser(user);
 
-        return new ResFormat(true, 201L, savedUser);
+        return new ResFormat(true, 201L, "회원가입을 완료했습니다.");
     }
 
     @PostMapping("/signup/kakao")
@@ -40,7 +40,7 @@ public class SignUpController {
 
         User savedUser = userService.saveUser(user);
 
-        return new ResFormat(true, 201L, savedUser);
+        return new ResFormat(true, 201L, "회원가입을 완료했습니다.");
     }
 
     @PostMapping("/signup/certification")

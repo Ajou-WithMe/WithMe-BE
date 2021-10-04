@@ -5,7 +5,7 @@ import ajou.withme.main.Service.MailService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.Auth;
 import ajou.withme.main.domain.User;
-import ajou.withme.main.dto.user.*;
+import ajou.withme.main.dto.user.request.*;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
