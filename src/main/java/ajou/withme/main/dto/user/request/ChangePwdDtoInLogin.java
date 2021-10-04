@@ -1,9 +1,9 @@
-package ajou.withme.main.dto.user;
+package ajou.withme.main.dto.user.request;
 
 import lombok.Data;
 
 @Data
-public class LoginWithEmailDto {
+public class ChangePwdDtoInLogin {
     private String email;
     private String pwd;
 }

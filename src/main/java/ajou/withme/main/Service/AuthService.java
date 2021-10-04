@@ -95,4 +95,5 @@ public class AuthService {
     public void deleteAuthByRefreshToken(String refreshToken) {
         authRepository.deleteByRefreshToken(refreshToken);
     }
+
 }

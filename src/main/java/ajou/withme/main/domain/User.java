@@ -5,10 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -37,6 +36,17 @@ public class User {
     private String profileImg;
 
     private String uid;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PartyMember> partyMembers = new LinkedList<>();
+
+    public void addPartyMember(PartyMember partyMember) {
+        if (partyMembers == null) {
+            this.partyMembers = new LinkedList<>();
+        }
+        partyMembers.add(partyMember);
+        partyMember.setUser(this);
+    }
 
     public void updatePwd(String pwd) {
         this.pwd = pwd;

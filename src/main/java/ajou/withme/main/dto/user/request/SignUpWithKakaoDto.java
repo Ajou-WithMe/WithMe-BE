@@ -1,28 +1,23 @@
-package ajou.withme.main.dto.user;
+package ajou.withme.main.dto.user.request;
 
 import ajou.withme.main.domain.User;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
-public class SignUpWithEmailDto {
+public class SignUpWithKakaoDto {
     private String name;
-    private String email;
-    private String pwd;
     private String address;
     private String phone;
+    private String uid;
 
-    public User toEntity(String encodedPwd) {
+    public User toEntity() {
         return User.builder()
-                .email(this.email)
                 .name(this.name)
-                .pwd(encodedPwd)
                 .address(this.address)
                 .phone(this.phone)
+                .type(1L)
+                .uid(this.uid)
                 .profileImg(null)
-                .type(0L)
-                .uid(UUID.randomUUID().toString())
                 .build();
     }
 }

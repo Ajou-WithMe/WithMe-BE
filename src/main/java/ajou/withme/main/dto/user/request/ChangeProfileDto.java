@@ -1,4 +1,4 @@
-package ajou.withme.main.dto.user;
+package ajou.withme.main.dto.user.request;
 
 import lombok.Data;
 
