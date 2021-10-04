@@ -29,6 +29,23 @@ public class FileController {
 
         String url = s3Service.upload(path, file);
 
+        if (url.equals("false")) {
+            return new ResFormat(false, 400L, "이미지 파일이 아닙니다.");
+        }
+
+        return new ResFormat(true, 201L, url);
+    }
+
+    @PostMapping("/group/{groupId}")
+    public ResFormat uploadGroupProfile(@PathVariable String groupId, MultipartFile file) throws IOException {
+        String path = "group/" + groupId + "/profile/";
+
+        String url = s3Service.upload(path, file);
+
+        if (url.equals("false")) {
+            return new ResFormat(false, 400L, "이미지 파일이 아닙니다.");
+        }
+
         return new ResFormat(true, 201L, url);
     }
 }

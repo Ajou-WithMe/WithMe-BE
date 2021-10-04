@@ -32,6 +32,12 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
                 String uid = authService.getExpiredSubject(accessToken);
                 Auth auth = authService.findAuthByAccessToken(accessToken);
 
+                if (auth == null) {
+                    response.setContentType("application/json");
+                    response.getWriter().println("{\"success\":false,\"status\":401,\"data\":\"Unauthorized Token\"}");
+                    return false;
+                }
+
                 if (!authService.isValidToken(auth.getRefreshToken())) {
                     response.setContentType("application/json");
                     response.getWriter().println("{\"success\":false,\"status\":401,\"data\":\"Unauthorized Token\"}");
@@ -39,13 +45,14 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
                 }
 
                 if (uid.equals(authService.getSubject(authService.getClaimsByToken(auth.getRefreshToken())))) {
-                    String newAccessToken = authService.createToken(uid, (long) (2 * 60 * 60 * 1000));
+                    String newAccessToken = authService.createToken(uid, (long) (5 * 60 * 1000));
                     String newRefreshToken = authService.createToken(uid, (long) (14 * 24 * 60 * 60 * 1000));
 
                     authService.deleteAuthByRefreshToken(auth.getRefreshToken());
                     Auth newAuth = authService.createAuth(newAccessToken,newRefreshToken, auth.getUser());
                     authService.saveAuth(newAuth);
 
+                    request.setAttribute("uid", auth.getUser().getUid());
                     response.setHeader("AccessToken", newAccessToken);
                 }
                 return true;
