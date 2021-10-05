@@ -36,9 +36,9 @@ public class FileController {
         return new ResFormat(true, 201L, url);
     }
 
-    @PostMapping("/group/{groupId}")
-    public ResFormat uploadGroupProfile(@PathVariable String groupId, MultipartFile file) throws IOException {
-        String path = "group/" + groupId + "/profile/";
+    @PostMapping("/party/{partyCode}")
+    public ResFormat uploadGroupProfile(@PathVariable String partyCode, MultipartFile file) throws IOException {
+        String path = "party/" + partyCode + "/profile/";
 
         String url = s3Service.upload(path, file);
 
