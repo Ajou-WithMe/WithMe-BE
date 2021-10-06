@@ -39,4 +39,11 @@ public class Party {
         partyMember.setParty(this);
     }
 
+    public void updateName(String name) {
+        this.name = name;
+    }
+    public void updateProfile(String profile) {
+        this.profile = profile;
+    }
+
 }

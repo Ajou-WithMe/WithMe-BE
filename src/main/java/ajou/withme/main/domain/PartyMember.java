@@ -28,4 +28,10 @@ public class PartyMember {
 
 //    0:피보호자, 1:승인된 보호자, 2:미승인 보호자
     private int type;
+
+    public void updateType(Boolean approval) {
+        if (approval) {
+            this.type = 1;
+        }
+    }
 }

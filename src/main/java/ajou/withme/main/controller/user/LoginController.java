@@ -35,7 +35,8 @@ public class LoginController {
 
         if (isLogin) {
             // login 성공
-            String accessToken = authService.createToken(userByEmail.getUid(), (5 * 60L* 1000));
+            // 임시로 30일짜리 토큰 발급
+            String accessToken = authService.createToken(userByEmail.getUid(), (30*24L * 60 * 60L* 1000));
             String refreshToken = authService.createToken(userByEmail.getUid(), (30L * 24 * 60 * 60 * 1000));
 
             Auth auth = authService.createAuth(accessToken, refreshToken, userByEmail);

@@ -27,4 +27,8 @@ public class UserService {
     public User findUserByNamePhone(String name, String phone) {
         return userRepository.findByNamePhone(name, phone);
     }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
 }
