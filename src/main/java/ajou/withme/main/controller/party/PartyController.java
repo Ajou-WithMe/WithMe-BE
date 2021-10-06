@@ -116,7 +116,7 @@ public class PartyController {
         }
         List<PartyMember> allPartyMemberByParty = partyMemberService.findAllPartyMemberByParty(partyByCode);
 
-        // 프로필, 이름, uid
+        // 프로필, 이름, uid, type
         List<PartyDetailUserResponse> protector = new LinkedList<>();
         List<PartyDetailUserResponse> protectionPerson = new LinkedList<>();
 
@@ -126,9 +126,9 @@ public class PartyController {
             User curUser = partyMember.getUser();
 
             if (partyMember.getType() == 0) {
-                protectionPerson.add(new PartyDetailUserResponse(curUser.getName(),curUser.getProfileImg(),curUser.getUid()));
+                protectionPerson.add(new PartyDetailUserResponse(curUser.getName(),curUser.getProfileImg(),curUser.getUid(), partyMember.getType()));
             } else {
-                protector.add(new PartyDetailUserResponse(curUser.getName(),curUser.getProfileImg(),curUser.getUid()));
+                protector.add(new PartyDetailUserResponse(curUser.getName(),curUser.getProfileImg(),curUser.getUid(), partyMember.getType()));
             }
         }
 

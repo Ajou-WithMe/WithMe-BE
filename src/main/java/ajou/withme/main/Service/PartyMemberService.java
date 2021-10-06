@@ -34,4 +34,12 @@ public class PartyMemberService {
     public List<PartyMember> findAllPartyMemberByParty(Party partyByCode) {
         return partyMemberRepository.findAllByParty(partyByCode);
     }
+
+    public void deletePartyMemberByPartyAndUser(Party partyByCode, User userByUid) {
+        partyMemberRepository.deleteByPartyAndUser(partyByCode, userByUid);
+    }
+
+    public List<PartyMember> findAllPartyMemberByPartyAndType(Party partyByCode, int type) {
+        return partyMemberRepository.findAllByPartyAndType(partyByCode, type);
+    }
 }
