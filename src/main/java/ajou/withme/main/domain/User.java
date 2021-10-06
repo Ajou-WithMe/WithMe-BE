@@ -48,6 +48,9 @@ public class User {
         partyMember.setUser(this);
     }
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserOption userOption;
+
     public void updatePwd(String pwd) {
         this.pwd = pwd;
     }
@@ -66,5 +69,14 @@ public class User {
 
     public void updateProfileImg(String profileImg) {
         this.profileImg = profileImg;
+    }
+
+    public UserOption initUserOptionEntity() {
+        return UserOption.builder()
+                .user(this)
+                .isNewSafeZone(true)
+                .pushAlarm(true)
+                .safeMove(false)
+                .build();
     }
 }

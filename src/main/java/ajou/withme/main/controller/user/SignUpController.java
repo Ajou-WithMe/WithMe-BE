@@ -1,8 +1,10 @@
 package ajou.withme.main.controller.user;
 
 import ajou.withme.main.Service.MailService;
+import ajou.withme.main.Service.UserOptionService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.User;
+import ajou.withme.main.domain.UserOption;
 import ajou.withme.main.dto.user.request.SignUpWithEmailDto;
 import ajou.withme.main.dto.user.request.SignUpWithKakaoDto;
 import ajou.withme.main.dto.user.request.UserEmailDto;
@@ -21,6 +23,7 @@ public class SignUpController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final UserOptionService userOptionService;
 
     @PostMapping("/signup/email")
     public ResFormat signUpWithEmail(@RequestBody SignUpWithEmailDto signUpWithEmailDto) {
@@ -32,8 +35,10 @@ public class SignUpController {
 
         String encodedPwd = passwordEncoder.encode(signUpWithEmailDto.getPwd());
         User user = signUpWithEmailDto.toEntity(encodedPwd);
-
         User savedUser = userService.saveUser(user);
+
+        UserOption userOption = user.initUserOptionEntity();
+        userOptionService.saveUserOption(userOption);
 
         return new ResFormat(true, 201L, "회원가입을 완료했습니다.");
     }
@@ -42,8 +47,10 @@ public class SignUpController {
     public ResFormat signUpWithKakao(@RequestBody SignUpWithKakaoDto signUpWithKakaoDto) {
 
         User user = signUpWithKakaoDto.toEntity();
-
         User savedUser = userService.saveUser(user);
+
+        UserOption userOption = user.initUserOptionEntity();
+        userOptionService.saveUserOption(userOption);
 
         return new ResFormat(true, 201L, "회원가입을 완료했습니다.");
     }
