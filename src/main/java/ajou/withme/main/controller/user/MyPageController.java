@@ -25,7 +25,7 @@ public class MyPageController {
     // 현재 개인정보 보는 기능 필요함
     // 1. pwd 변경, 2. 개인정보 확인, 3. 개인정보 변경
 
-    @PostMapping("/mypage")
+    @PutMapping("/mypage")
     public ResFormat changeProfile(HttpServletRequest request, @RequestBody ChangeProfileDto changeProfileDto) {
         String uid = jwtTokenUtil.getSubject(request);
         User user = userService.findUserByUid(uid);
@@ -56,7 +56,7 @@ public class MyPageController {
         return new ResFormat(true, 200L, new GetMyProfileResponse(user.getName(), user.getEmail(), user.getAddress(), user.getPhone(), user.getType(), user.getProfileImg()));
     }
     
-    @PostMapping("/mypage/changePwd")
+    @PutMapping("/mypage/changePwd")
     public ResFormat changePwd(HttpServletRequest request, @RequestBody UserPwdDto userPwdDto){
         String uid = jwtTokenUtil.getSubject(request);
         User user = userService.findUserByUid(uid);

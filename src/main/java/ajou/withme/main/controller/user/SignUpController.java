@@ -25,6 +25,11 @@ public class SignUpController {
     @PostMapping("/signup/email")
     public ResFormat signUpWithEmail(@RequestBody SignUpWithEmailDto signUpWithEmailDto) {
 
+        User userByEmail = userService.findUserByEmail(signUpWithEmailDto.getEmail());
+        if (userByEmail != null) {
+            return new ResFormat(false, 400L, "이미 회원가입된 이메일입니다.");
+        }
+
         String encodedPwd = passwordEncoder.encode(signUpWithEmailDto.getPwd());
         User user = signUpWithEmailDto.toEntity(encodedPwd);
 
