@@ -31,6 +31,9 @@ public class UserOption {
     @CreationTimestamp
     private Date currentNetwork;
 
+    private Long time;
+    private Double distance;
+
     @JoinColumn
     @OneToOne
     User user;

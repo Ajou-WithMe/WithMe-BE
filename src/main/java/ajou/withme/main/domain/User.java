@@ -77,6 +77,8 @@ public class User {
                 .isNewSafeZone(true)
                 .pushAlarm(true)
                 .safeMove(false)
+                .distance(0D)
+                .time(0L)
                 .build();
     }
 }
