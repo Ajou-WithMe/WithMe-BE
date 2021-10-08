@@ -61,9 +61,10 @@ public class S3Service {
         assert contentType != null;
         String[] split = contentType.split("/");
 
-        if (!split[0].equals("image")) {
-            return "false";
-        }
+//        if (!split[0].equals("image")) {
+//            return "false";
+//        }
+        System.out.println(contentType);
 
         InputStream inputStream = file.getInputStream();
         BufferedImage originalImg = ImageIO.read(inputStream);
