@@ -1,14 +1,11 @@
 package ajou.withme.main.controller.user;
 
-import ajou.withme.main.Service.MailService;
-import ajou.withme.main.Service.UserOptionService;
-import ajou.withme.main.Service.UserService;
+import ajou.withme.main.Service.*;
+import ajou.withme.main.domain.Party;
+import ajou.withme.main.domain.PartyMember;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.domain.UserOption;
-import ajou.withme.main.dto.user.request.SignUpWithEmailDto;
-import ajou.withme.main.dto.user.request.SignUpWithKakaoDto;
-import ajou.withme.main.dto.user.request.UserEmailDto;
-import ajou.withme.main.dto.user.request.UserUidDto;
+import ajou.withme.main.dto.user.request.*;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +21,8 @@ public class SignUpController {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final UserOptionService userOptionService;
+    private final PartyService partyService;
+    private final PartyMemberService partyMemberService;
 
     @PostMapping("/signup/email")
     public ResFormat signUpWithEmail(@RequestBody SignUpWithEmailDto signUpWithEmailDto) {
@@ -79,6 +78,33 @@ public class SignUpController {
         boolean check = userByEmail == null;
 
         return new ResFormat(true, 200L, check);
+    }
+
+    @PostMapping("/signup/protection")
+    public ResFormat signupProtection(@RequestBody SignUpProtectionRequest signUpProtectionRequest) {
+//        아이디 중복체크
+//        비밀번호 암호화
+        User userByEmail = userService.findUserByEmail(signUpProtectionRequest.getEmail());
+        if (userByEmail != null) {
+            return new ResFormat(false, 400L, "이미 회원가입된 아이디입니다.");
+        }
+        String encodedPwd = passwordEncoder.encode(signUpProtectionRequest.getPwd());
+
+        User newUser = signUpProtectionRequest.toEntity(encodedPwd);
+        User savedUser = userService.saveUser(newUser);
+
+        UserOption userOption = newUser.initUserOptionEntity();
+        userOptionService.saveUserOption(userOption);
+        
+//        그룹에 추가
+        Party partyByCode = partyService.findPartyByCode(signUpProtectionRequest.getCode());
+
+        PartyMember partyMember = new PartyMember(partyByCode, newUser, 0);
+        partyMemberService.savePartyMember(partyMember);
+
+        return new ResFormat(true, 201L, "피보호자 계정 생성을 완료했습니다.");
+
+
     }
 
 }

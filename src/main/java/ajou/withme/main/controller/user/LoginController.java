@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -44,7 +46,11 @@ public class LoginController {
             authService.deleteAuthByUser(userByEmail);
             authService.saveAuth(auth);
 
-            return new ResFormat(true, 201L, accessToken);
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("accessToken", accessToken);
+            res.put("type", userByEmail.getType());
+
+            return new ResFormat(true, 201L, res);
         } else {
             // login 실패
             return new ResFormat(false, 400L, "비밀번호가 일치하지 않습니다.");
@@ -70,7 +76,11 @@ public class LoginController {
         authService.deleteAuthByUser(userByUid);
         authService.saveAuth(auth);
 
-        return new ResFormat(true, 201L, accessToken);
+        Map<String, Object> res = new LinkedHashMap<>();
+        res.put("accessToken", accessToken);
+        res.put("type", userByUid.getType());
+
+        return new ResFormat(true, 201L, res);
     }
 
     @PostMapping("/login/findPwd")
