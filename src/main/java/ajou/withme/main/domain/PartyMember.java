@@ -34,4 +34,10 @@ public class PartyMember {
             this.type = 1;
         }
     }
+
+    public PartyMember(Party party, User user, int type) {
+        this.party = party;
+        this.user = user;
+        this.type = type;
+    }
 }
