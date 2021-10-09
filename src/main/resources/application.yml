@@ -53,6 +53,11 @@ spring:
   config:
     activate:
       on-profile: "test"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(OjlhGiSF3hP8WPe4LJoVaT/9T7TvRfOhWaYTizYz7LJGlyVbMFTpdIM01/REbFygVsbN5EJl7WxmGHg9Mi7Mautlc/cCNlNlP6i+850Y1WkCx2flKIqD10mYrUXcql929X2XXOXcnqlezEnzNaIerg==)
+    username: admin
+    password: ENC(+ozeDPtMMKMg2CpvY4FHY/w8h2lyYUtb)
 
 
 ---

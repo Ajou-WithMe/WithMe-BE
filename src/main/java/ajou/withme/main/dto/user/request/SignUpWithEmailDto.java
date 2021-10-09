@@ -13,6 +13,17 @@ public class SignUpWithEmailDto {
     private String address;
     private String phone;
 
+    public SignUpWithEmailDto() {
+    }
+
+    public SignUpWithEmailDto(String name, String email, String pwd, String address, String phone) {
+        this.name = name;
+        this.email = email;
+        this.pwd = pwd;
+        this.address = address;
+        this.phone = phone;
+    }
+
     public User toEntity(String encodedPwd) {
         return User.builder()
                 .email(this.email)
