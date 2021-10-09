@@ -74,11 +74,12 @@ public class User {
     public UserOption initUserOptionEntity() {
         return UserOption.builder()
                 .user(this)
-                .isNewSafeZone(true)
+                .isInitSafeZone(true)
                 .pushAlarm(true)
                 .safeMove(false)
                 .distance(0D)
                 .time(0L)
+                .boxSize(0D)
                 .build();
     }
 }
