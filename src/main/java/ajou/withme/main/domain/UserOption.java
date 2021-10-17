@@ -36,6 +36,10 @@ public class UserOption {
 
     private Double boxSize;
 
+    //    좌측 최상단의 x,y좌표
+    private Double xTemp;
+    private Double yTemp;
+
     @JoinColumn
     @OneToOne
     User user;
