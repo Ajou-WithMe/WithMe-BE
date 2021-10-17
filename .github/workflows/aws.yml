@@ -48,7 +48,7 @@ jobs:
       run: chmod +x gradlew
       
     - name: Build with Gradle
-      run: ./gradlew build -Pjasypt.encryptor.password=${{ secrets.JASYPT_PWD }}
+      run: ./gradlew build -Pjasypt.encryptor.password=${{ secrets.JASYPT_PWD }} -Dspring.profiles.active=test
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1

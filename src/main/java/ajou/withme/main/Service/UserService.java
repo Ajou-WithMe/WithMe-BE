@@ -4,6 +4,8 @@ import ajou.withme.main.Repository.UserRepository;
 import ajou.withme.main.domain.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -24,7 +26,7 @@ public class UserService {
         return userRepository.findByUid(uid);
     }
 
-    public User findUserByNamePhone(String name, String phone) {
+    public List<User> findUserByNamePhone(String name, String phone) {
         return userRepository.findByNamePhone(name, phone);
     }
 
