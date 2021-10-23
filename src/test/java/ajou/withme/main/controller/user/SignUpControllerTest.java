@@ -17,7 +17,7 @@ class SignUpControllerTest extends BaseControllerTest {
     @DisplayName("signUpWithEmail")
     void signupWithEmail() throws Exception {
         // Given
-        SignUpWithEmailDto signUpWithEmailDto = new SignUpWithEmailDto("testName", "test123@naver.com", "testpwd123", "수원시 테스트구 테스트동", "01012345678");
+        SignUpWithEmailDto signUpWithEmailDto = new SignUpWithEmailDto("testName", "test12345@naver.com", "testpwd123", "수원시 테스트구 테스트동", "01012345678");
         // When
         ResultActions resultActions = this.mockMvc.perform(post("/user/signup/email")
                 .contentType(MediaType.APPLICATION_JSON)
