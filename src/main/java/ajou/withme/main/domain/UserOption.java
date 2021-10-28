@@ -20,12 +20,12 @@ public class UserOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean safeMove;
+    private int safeMove;
 
-    private boolean pushAlarm;
+    private int pushAlarm;
 
-    // 세이프존 테이블이 2개니까, 신규 유저인지 확인하는 칼럼. true면 신규유저, false면 새로 safe존을 만든것
-    private boolean isInitSafeZone;
+    // 세이프존 테이블이 2개니까, 신규 유저인지 확인하는 칼럼. true(1)면 신규유저, false면 새로 safe존을 만든것
+    private int isInitSafeZone;
     
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -43,4 +43,10 @@ public class UserOption {
     @JoinColumn
     @OneToOne
     User user;
+
+    public void updateSafeMove(int safemode) {
+        System.out.println("safemode = " + safemode);
+        this.safeMove = safemode;
+        System.out.println("this.safeMove = " + this.safeMove);
+    }
 }

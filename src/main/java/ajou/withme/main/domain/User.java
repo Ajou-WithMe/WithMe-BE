@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +38,10 @@ public class User {
     private String profileImg;
 
     private String uid;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PartyMember> partyMembers = new LinkedList<>();
@@ -74,9 +80,9 @@ public class User {
     public UserOption initUserOptionEntity() {
         return UserOption.builder()
                 .user(this)
-                .isInitSafeZone(true)
-                .pushAlarm(true)
-                .safeMove(false)
+                .isInitSafeZone(1)
+                .pushAlarm(1)
+                .safeMove(0)
                 .distance(0D)
                 .time(0L)
                 .boxSize(0D)
