@@ -8,6 +8,7 @@ import ajou.withme.main.domain.PartyMember;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.partyMember.request.ApplyPartyMemberRequest;
 import ajou.withme.main.dto.partyMember.request.ApprovalPartyMemberRequest;
+import ajou.withme.main.dto.partyMember.response.FindAllProtectionResponse;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -38,7 +40,7 @@ public class PartyMemberController {
             return new ResFormat(false, 400L, "해당하는 code의 그룹이 없습니다.");
         }
 
-        PartyMember existPartyMember  = partyMemberService.findPartyMemberByPartyUser(party, user);
+        PartyMember existPartyMember = partyMemberService.findPartyMemberByPartyUser(party, user);
         if (existPartyMember != null) {
             return new ResFormat(false, 400L, "이미 신청한 그룹입니다.");
 
@@ -85,7 +87,7 @@ public class PartyMemberController {
         if (protector.size() == 0) {
             partyService.deletePartyByCode(code);
 
-            for (PartyMember partyMember:
+            for (PartyMember partyMember :
                     protectionPerson) {
                 userService.deleteUser(partyMember.getUser());
             }
@@ -93,6 +95,41 @@ public class PartyMemberController {
         }
 
         return new ResFormat(true, 201L, "그룹 탈퇴를 완료했습니다.");
+    }
+
+    @GetMapping("/allProtection")
+    public ResFormat findAllProtection(HttpServletRequest request) {
+        String uid = jwtTokenUtil.getSubject(request);
+
+        User userByUid = userService.findUserByUid(uid);
+
+        List<PartyMember> allPartyMemberByUser = partyMemberService.findAllPartyMemberByUser(userByUid);
+
+//        보호자의 파티 목록
+        List<Party> parties = new LinkedList<>();
+
+        for (PartyMember partyMember :
+                allPartyMemberByUser) {
+            if (partyMember.getType() == 1 || partyMember.getType() == 0) {
+                parties.add(partyMember.getParty());
+            }
+        }
+
+        List<FindAllProtectionResponse> partyMembers = new LinkedList<>();
+
+        for (Party party :
+                parties) {
+            // 피보호자만 델고옴.
+            List<PartyMember> allPartyMemberByPartyAndType = partyMemberService.findAllPartyMemberByPartyAndType(party, 0);
+
+            for (PartyMember partyMember :
+                    allPartyMemberByPartyAndType) {
+                User user = partyMember.getUser();
+                partyMembers.add(new FindAllProtectionResponse(user.getUid(),user.getName(), user.getProfileImg()));
+            }
+        }
+
+        return new ResFormat(true, 200L, partyMembers);
     }
 
 }
