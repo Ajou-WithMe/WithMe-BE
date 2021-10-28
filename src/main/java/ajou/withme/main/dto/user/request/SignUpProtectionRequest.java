@@ -1,11 +1,15 @@
 package ajou.withme.main.dto.user.request;
 
 import ajou.withme.main.domain.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignUpProtectionRequest {
     private String name;
     private String email;

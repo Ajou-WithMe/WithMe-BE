@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -98,12 +100,21 @@ public class LoginController {
 
     @PostMapping("/login/findEmail")
     public ResFormat findEmail(@RequestBody FindEmailDto findEmailDto){
-        User userByEmail = userService.findUserByNamePhone(findEmailDto.getName(), findEmailDto.getPhone());
+        List<User> userByEmail = userService.findUserByNamePhone(findEmailDto.getName(), findEmailDto.getPhone());
 
-        if (userByEmail == null) {
+        List<String> emails = new LinkedList<>();
+        for (User user:
+             userByEmail) {
+            if (user.getEmail() != null) {
+                emails.add(user.getEmail());
+            }
+        }
+
+        if (emails.isEmpty()) {
             return new ResFormat(false, 400L, "조회에 실패했습니다.");
         }
-        return new ResFormat(true, 201L, userByEmail.getEmail());
+
+        return new ResFormat(true, 201L, emails);
     }
 
     @PostMapping("/login/findPwd/changePwd")
