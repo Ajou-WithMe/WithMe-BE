@@ -43,4 +43,10 @@ public class UserOption {
     @JoinColumn
     @OneToOne
     User user;
+
+    public void updateSafeMove(int safemode) {
+        System.out.println("safemode = " + safemode);
+        this.safeMove = safemode;
+        System.out.println("this.safeMove = " + this.safeMove);
+    }
 }
