@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 @NoArgsConstructor
@@ -52,7 +53,12 @@ public class S3Service {
     }
 
     public String upload(String path, MultipartFile file) throws IOException {
-        String fileName = path + file.getOriginalFilename();
+        String newFileName = createFileName(file.getOriginalFilename());
+        String[] splitName = file.getOriginalFilename().split("\\.");
+
+        newFileName = newFileName + "." + splitName[1];
+
+        String fileName = path + newFileName;
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         String contentType = file.getContentType();
@@ -64,7 +70,6 @@ public class S3Service {
 //        if (!split[0].equals("image")) {
 //            return "false";
 //        }
-        System.out.println(contentType);
 
         InputStream inputStream = file.getInputStream();
         BufferedImage originalImg = ImageIO.read(inputStream);
@@ -79,6 +84,10 @@ public class S3Service {
 
         s3Client.putObject(new PutObjectRequest(bucket, fileName, newInput, objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        return fileName;
+    }
+
+    public String createFileName(String originFileName) {
+        return UUID.randomUUID().toString().replace("-","").substring(0,9);
     }
 }

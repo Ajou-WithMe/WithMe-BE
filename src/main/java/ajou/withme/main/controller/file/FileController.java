@@ -27,15 +27,13 @@ public class FileController {
 
         String path = "profile/" + uid + "/";
 
-        String url = s3Service.upload(path, file);
+        String fileName = s3Service.upload(path, file);
 
-        if (url.equals("false")) {
-            return new ResFormat(false, 400L, "이미지 파일이 아닙니다.");
-        }
 
-        return new ResFormat(true, 201L, url);
+        return new ResFormat(true, 201L, fileName);
     }
 
+//    deprecated
     @PostMapping("/party/{partyCode}")
     public ResFormat uploadGroupProfile(@PathVariable String partyCode, MultipartFile file) throws IOException {
         String path = "party/" + partyCode + "/profile/";
@@ -47,5 +45,14 @@ public class FileController {
         }
 
         return new ResFormat(true, 201L, url);
+    }
+
+    @PostMapping("/post")
+    public ResFormat uploadPostFile(HttpServletRequest request, MultipartFile file) throws IOException {
+        String path = "post/";
+
+        String fileName = s3Service.upload(path, file);
+
+        return new ResFormat(true, 201L, fileName);
     }
 }
