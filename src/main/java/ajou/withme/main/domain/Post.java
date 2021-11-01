@@ -44,7 +44,7 @@ public class Post {
     //  마지막 장소
     private Double longitude;
 
-    private Double latitube;
+    private Double latitude;
 
     private String title;
 
