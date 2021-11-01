@@ -28,9 +28,9 @@ public class FileController {
         String path = "profile/" + uid + "/";
 
         String fileName = s3Service.upload(path, file);
+        String fileUrl = s3Service.getFileUrl(fileName);
 
-
-        return new ResFormat(true, 201L, fileName);
+        return new ResFormat(true, 201L, fileUrl);
     }
 
 //    deprecated
