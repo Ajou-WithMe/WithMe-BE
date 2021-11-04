@@ -46,6 +46,18 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PartyMember> partyMembers = new LinkedList<>();
 
+    @OneToMany(mappedBy = "guardian", cascade = CascadeType.ALL)
+    private List<Post> guardians = new LinkedList<>();
+
+    @OneToMany(mappedBy = "protection", cascade = CascadeType.ALL)
+    private List<Post> protections = new LinkedList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new LinkedList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentReport> commentReports = new LinkedList<>();
+
     public void addPartyMember(PartyMember partyMember) {
         if (partyMembers == null) {
             this.partyMembers = new LinkedList<>();
