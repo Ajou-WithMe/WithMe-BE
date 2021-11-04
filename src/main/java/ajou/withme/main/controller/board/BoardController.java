@@ -43,4 +43,11 @@ public class BoardController {
 
         return new ResFormat(true, 201L, "게시글 작성을 완료했습니다.");
     }
+
+    @DeleteMapping
+    public ResFormat deletePost(@RequestParam Long id) {
+        postService.deletePostById(id);
+
+        return new ResFormat(true, 201L, "게시글 삭제를 완료했습니다.");
+    }
 }
