@@ -55,6 +55,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new LinkedList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentReport> commentReports = new LinkedList<>();
+
     public void addPartyMember(PartyMember partyMember) {
         if (partyMembers == null) {
             this.partyMembers = new LinkedList<>();

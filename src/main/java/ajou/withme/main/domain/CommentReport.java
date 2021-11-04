@@ -1,5 +1,4 @@
 package ajou.withme.main.domain;
-//댓글
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,34 +8,31 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class Comment {
-
+public class CommentReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String comment;
+//    1. 욕설/인신공격 2. 개인정보노출 3. 같은 내용 반복게시 4. 호위정보유포 5. 음란성/선정성 6. 기타
+    private int type;
+
+    private String msg;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date createdAt;
 
-    @JoinColumn
     @ManyToOne
-    private Post post;
-
     @JoinColumn
-    @ManyToOne
-    private User user;
+    User user;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    private List<CommentReport> commentReports = new LinkedList<>();
+    @ManyToOne
+    @JoinColumn
+    Comment comment;
 }
