@@ -65,4 +65,8 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostFile> postFiles = new LinkedList<>();
+
+    public void updateState(int state) {
+        this.state = state;
+    }
 }

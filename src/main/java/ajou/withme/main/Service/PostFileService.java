@@ -6,6 +6,8 @@ import ajou.withme.main.domain.PostFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostFileService {
@@ -14,5 +16,9 @@ public class PostFileService {
 
     public PostFile savePostFile(PostFile postFile) {
         return postFileRepository.save(postFile);
+    }
+
+    public List<PostFile> findFileByPost(Post post) {
+        return postFileRepository.findByPost(post);
     }
 }
