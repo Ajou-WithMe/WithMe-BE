@@ -14,4 +14,12 @@ public class CommentService {
     public Comment saveComment(Comment comment) {
         return commentRepository.save(comment);
     }
+
+    public Comment findCommentById(Long id) {
+        return commentRepository.findById(id).orElse(null);
+    }
+
+    public void deleteCommentById(Long id) {
+        commentRepository.deleteById(id);
+    }
 }
