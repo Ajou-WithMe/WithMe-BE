@@ -2,8 +2,11 @@ package ajou.withme.main.Service;
 
 import ajou.withme.main.Repository.CommentRepository;
 import ajou.withme.main.domain.Comment;
+import ajou.withme.main.domain.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +24,9 @@ public class CommentService {
 
     public void deleteCommentById(Long id) {
         commentRepository.deleteById(id);
+    }
+
+    public List<Comment> findCommentAllByPost(Post postById) {
+        return commentRepository.findAllByPost(postById);
     }
 }
