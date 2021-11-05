@@ -10,6 +10,7 @@ import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.board.request.SavePostRequest;
 import ajou.withme.main.dto.board.request.UpdatePostStateRequest;
 import ajou.withme.main.dto.board.response.GetPostDetailResponse;
+import ajou.withme.main.dto.board.response.MyPostResponse;
 import ajou.withme.main.dto.board.response.PostPagingResponse;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
@@ -102,7 +103,7 @@ public class BoardController {
 
         List<PostPagingResponse> pagingResponses = new LinkedList<>();
 
-        for (Post post : postService.findPostAllByLocation(pageRequest, location)) {
+        for (Post post : postService.findPostAllByLocationState(pageRequest, location, 0)) {
 //            0. id 1.이미지 2.타이틀 3. 마지막 목격장소 4.인상착의 5. createdAt
             PostPagingResponse curPost = new PostPagingResponse(post);
 
@@ -119,6 +120,32 @@ public class BoardController {
 
 
         return new ResFormat(true, 200L, pagingResponses);
+    }
+
+    @GetMapping("/my")
+    public ResFormat getMyPosts(HttpServletRequest request) {
+        String subject = jwtTokenUtil.getSubject(request);
+        User userByUid = userService.findUserByUid(subject);
+
+        List<Post> posts = postService.findPostByGuardian(userByUid);
+
+        List<MyPostResponse> myPostResponses = new LinkedList<>();
+
+        for (Post post:
+             posts) {
+            MyPostResponse curPost = new MyPostResponse(post);
+
+            List<PostFile> fileByPost = postFileService.findFileByPost(post);
+
+            if (!fileByPost.isEmpty()) {
+                String fileUrl = s3Service.getFileUrl(fileByPost.get(0).getFile());
+                curPost.setImg(fileUrl);
+            }
+
+            myPostResponses.add(curPost);
+        }
+
+        return new ResFormat(true, 200L, myPostResponses);
     }
 
     @PostMapping("/test")
