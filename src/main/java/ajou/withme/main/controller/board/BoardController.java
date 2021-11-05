@@ -58,7 +58,10 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResFormat getPostDetail(@RequestParam Long id) {
+    public ResFormat getPostDetail(HttpServletRequest request, @RequestParam Long id) {
+        String uid = jwtTokenUtil.getSubject(request);
+        User userByUid = userService.findUserByUid(uid);
+
         Post post = postService.findPostById(id);
 
         List<PostFile> postFileList = postFileService.findFileByPost(post);
@@ -72,6 +75,10 @@ public class BoardController {
         }
 
         GetPostDetailResponse getPostDetailResponse = new GetPostDetailResponse(post, fileUrl);
+
+        if (post.getGuardian().getUid().equals(userByUid.getUid())) {
+            getPostDetailResponse.setMine(true);
+        }
 
         return new ResFormat(true, 200L, getPostDetailResponse);
     }

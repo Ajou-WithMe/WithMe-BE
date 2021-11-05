@@ -21,6 +21,7 @@ public class GetPostDetailResponse {
     String contact;
     Double longitude;
     Double latitude;
+    boolean isMine;
 
     public GetPostDetailResponse(Post post, List<String> files) {
         this.id = post.getId();
@@ -40,7 +41,7 @@ public class GetPostDetailResponse {
 
         this.latitude = post.getLatitude();
         this.longitude = post.getLongitude();
-
+        this.isMine = false;
         this.files = files;
 
     }
