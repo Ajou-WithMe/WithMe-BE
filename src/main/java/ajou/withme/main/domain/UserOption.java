@@ -20,11 +20,13 @@ public class UserOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    1이 켜진거, 0은 꺼진거
     private int safeMove;
 
+//    1이 켜진거, 0은 꺼진거
     private int pushAlarm;
 
-    // 세이프존 테이블이 2개니까, 신규 유저인지 확인하는 칼럼. true(1)면 신규유저, false면 새로 safe존을 만든것
+    // 세이프존 테이블이 2개니까, 0이 신규유저 1인 신규 ㄴㄴ
     private int isInitSafeZone;
     
     @Temporal(TemporalType.TIMESTAMP)
