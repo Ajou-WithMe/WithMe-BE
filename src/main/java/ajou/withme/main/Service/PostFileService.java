@@ -21,4 +21,8 @@ public class PostFileService {
     public List<PostFile> findFileByPost(Post post) {
         return postFileRepository.findByPost(post);
     }
+
+    public void deleteByPost(Post savedPost) {
+        postFileRepository.deleteByPost(savedPost);
+    }
 }
