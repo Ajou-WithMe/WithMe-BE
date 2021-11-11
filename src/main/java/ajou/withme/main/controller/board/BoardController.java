@@ -9,13 +9,12 @@ import ajou.withme.main.domain.PostFile;
 import ajou.withme.main.domain.User;
 import ajou.withme.main.dto.board.request.SavePostRequest;
 import ajou.withme.main.dto.board.request.UpdatePostStateRequest;
-import ajou.withme.main.dto.board.response.GetPostDetailResponse;
-import ajou.withme.main.dto.board.response.MyPostResponse;
-import ajou.withme.main.dto.board.response.PostPagingResponse;
+import ajou.withme.main.dto.board.response.*;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +50,48 @@ public class BoardController {
         }
 
         return new ResFormat(true, 201L, "게시글 작성을 완료했습니다.");
+    }
+
+    @PutMapping
+    @Transactional
+    public ResFormat updatePost(HttpServletRequest request, @RequestParam Long id, @RequestBody SavePostRequest savePostRequest) {
+        String uid = jwtTokenUtil.getSubject(request);
+
+        User guardian = userService.findUserByUid(uid);
+        User protection = userService.findUserByUid(savePostRequest.getProtection());
+
+        Post post = savePostRequest.toEntity(protection, guardian);
+        post.setId(id);
+
+        Post savedPost = postService.savePost(post);
+        postFileService.deleteByPost(savedPost);
+
+        for (String file:
+                savePostRequest.getFiles()) {
+            PostFile postFile = PostFile.builder().file(file).post(savedPost).build();
+            postFileService.savePostFile(postFile);
+        }
+
+        return new ResFormat(true, 201L, "게시글 수정을 완료했습니다.");
+    }
+
+    @GetMapping("/update")
+    public ResFormat getUpdateBase(@RequestParam Long id) {
+        Post postById = postService.findPostById(id);
+        List<PostFile> fileByPost = postFileService.findFileByPost(postById);
+        List<PostFileBaseResponse> postFileBase = new LinkedList<>();
+
+        for (PostFile postFile:
+             fileByPost) {
+            String fileUrl = s3Service.getFileUrl(postFile.getFile());
+            PostFileBaseResponse build = PostFileBaseResponse.builder().file(postFile.getFile()).url(fileUrl).build();
+            postFileBase.add(build);
+        }
+
+
+        GetUpdateBaseResponse getUpdateBaseResponse = new GetUpdateBaseResponse(postById, postFileBase);
+
+        return new ResFormat(true, 200L, getUpdateBaseResponse);
     }
 
     @DeleteMapping
@@ -147,6 +188,8 @@ public class BoardController {
 
         return new ResFormat(true, 200L, myPostResponses);
     }
+
+
 
     @PostMapping("/test")
     public ResFormat insertPost() {
