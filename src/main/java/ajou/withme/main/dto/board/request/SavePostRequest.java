@@ -4,6 +4,7 @@ import ajou.withme.main.domain.Post;
 import ajou.withme.main.domain.User;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -17,6 +18,8 @@ public class SavePostRequest {
     private Double latitude;
     private String content;
     private String protection;
+    private int state;
+    private Date createdAt;
     private List<String> files;
 
     public Post toEntity(User protection, User guardian) {
@@ -31,7 +34,8 @@ public class SavePostRequest {
                 .content(this.content)
                 .guardian(guardian)
                 .protection(protection)
-                .state(0)
+                .state(this.state)
+                .createdAt(this.createdAt)
                 .build();
 
     }
