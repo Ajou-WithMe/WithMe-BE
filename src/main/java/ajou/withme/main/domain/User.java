@@ -98,6 +98,7 @@ public class User {
                 .distance(0D)
                 .time(0L)
                 .boxSize(0D)
+                .isDisconnected(0)
                 .build();
     }
 }
