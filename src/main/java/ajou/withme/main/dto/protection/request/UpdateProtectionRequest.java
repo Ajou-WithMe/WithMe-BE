@@ -8,4 +8,5 @@ public class UpdateProtectionRequest {
     String profileImg;
     String name;
     String address;
+    String pwd;
 }

@@ -28,6 +28,9 @@ public class UserOption {
 
     // 세이프존 테이블이 2개니까, 0이 신규유저 1인 신규 ㄴㄴ
     private int isInitSafeZone;
+
+    // 0이면 연결 안끊어짐, 1이면 연결 끊어짐.
+    private int isDisconnected;
     
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
