@@ -83,6 +83,14 @@ public class ProtectionController {
         return new ResFormat(true, 201L, "프로필 변경을 완료했습니다.");
     }
 
+    @DeleteMapping("/quit")
+    public ResFormat quitProtection(@RequestParam String uid) {
+        User userByUid = userService.findUserByUid(uid);
+        userService.deleteUser(userByUid);
+
+        return new ResFormat(true, 201L, "피보호자 삭제를 완료했습니다.");
+    }
+
 
 
 }
