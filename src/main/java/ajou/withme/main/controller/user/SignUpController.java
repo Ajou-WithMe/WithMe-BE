@@ -102,7 +102,7 @@ public class SignUpController {
         PartyMember partyMember = new PartyMember(partyByCode, newUser, 0);
         partyMemberService.savePartyMember(partyMember);
 
-        return new ResFormat(true, 201L, "피보호자 계정 생성을 완료했습니다.");
+        return new ResFormat(true, 201L, newUser.getUid());
 
 
     }
