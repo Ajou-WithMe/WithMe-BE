@@ -6,6 +6,8 @@ import ajou.withme.main.domain.UserOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserOptionService {
@@ -23,5 +25,9 @@ public class UserOptionService {
 
     public UserOption findUserOptionByUser(User userByUid) {
         return userOptionRepository.findByUser(userByUid);
+    }
+
+    public List<UserOption> findAll() {
+        return userOptionRepository.findAll();
     }
 }
