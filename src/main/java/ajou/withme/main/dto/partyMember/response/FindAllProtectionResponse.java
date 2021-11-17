@@ -9,4 +9,6 @@ public class FindAllProtectionResponse {
     private String uid;
     private String name;
     private String profileImg;
+    private int isDisconnected;
+
 }

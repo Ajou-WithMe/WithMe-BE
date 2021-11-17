@@ -14,6 +14,7 @@ import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -140,7 +141,7 @@ public class BoardController {
     @GetMapping("/page")
     public ResFormat getPostPaging(@RequestParam int page, @RequestParam String location) {
 
-        PageRequest pageRequest = PageRequest.of(page, 20);
+        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by("id").descending());
 
         List<PostPagingResponse> pagingResponses = new LinkedList<>();
 

@@ -2,10 +2,12 @@ package ajou.withme.main.controller.partyMember;
 
 import ajou.withme.main.Service.PartyMemberService;
 import ajou.withme.main.Service.PartyService;
+import ajou.withme.main.Service.UserOptionService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.Party;
 import ajou.withme.main.domain.PartyMember;
 import ajou.withme.main.domain.User;
+import ajou.withme.main.domain.UserOption;
 import ajou.withme.main.dto.partyMember.request.ApplyPartyMemberRequest;
 import ajou.withme.main.dto.partyMember.request.ApprovalPartyMemberRequest;
 import ajou.withme.main.dto.partyMember.response.FindAllProtectionResponse;
@@ -28,6 +30,7 @@ public class PartyMemberController {
     private final PartyMemberService partyMemberService;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserService userService;
+    private final UserOptionService userOptionService;
 
     @PostMapping
     @Transactional
@@ -125,7 +128,8 @@ public class PartyMemberController {
             for (PartyMember partyMember :
                     allPartyMemberByPartyAndType) {
                 User user = partyMember.getUser();
-                partyMembers.add(new FindAllProtectionResponse(user.getUid(),user.getName(), user.getProfileImg()));
+                UserOption userOptionByUser = userOptionService.findUserOptionByUser(user);
+                partyMembers.add(new FindAllProtectionResponse(user.getUid(),user.getName(), user.getProfileImg(), userOptionByUser.getIsDisconnected()));
             }
         }
 
