@@ -37,13 +37,15 @@ public class NotificationController {
         Party party = allPartyMemberByUser.get(0).getParty();
         List<PartyMember> allPartyMemberByPartyAndType = partyMemberService.findAllPartyMemberByPartyAndType(party, 1);
 
-        for (PartyMember partyMember:
-                allPartyMemberByPartyAndType) {
-            User guardian = partyMember.getUser();
-            if (guardian.getEmail() == null) {
-                continue;
+        if (user.getType() == 2) {
+            for (PartyMember partyMember:
+                    allPartyMemberByPartyAndType) {
+                User guardian = partyMember.getUser();
+                if (guardian.getEmail() == null) {
+                    continue;
+                }
+                mailService.sendOutOfSafeZone(guardian.getEmail(),user.getName());
             }
-            mailService.sendOutOfSafeZone(guardian.getEmail(),user.getName());
         }
 
         return new ResFormat(true, 201L, "세이프존 이탈 알림 메일을 전송했습니다.");
