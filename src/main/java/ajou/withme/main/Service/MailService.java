@@ -59,4 +59,38 @@ public class MailService {
 
         return code;
     }
+
+    public void sendDisconnectedUser(String toEmail, String name) throws MessagingException {
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        MailForm mailForm = new MailForm();
+        String mailContent = mailForm.missingProtection(name);
+
+        helper.setFrom("WithMe"); //보내는사람
+        helper.setTo(toEmail); //받는사람
+        helper.setSubject("[WithMe] "+name+"님의 통신이 끊어졌습니다."); //메일제목
+        helper.setText(mailContent, true); //ture넣을경우 html
+
+        javaMailSender.send(mimeMessage);
+
+    }
+
+    public void sendOutOfSafeZone(String toEmail, String name) throws MessagingException {
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        MailForm mailForm = new MailForm();
+        String mailContent = mailForm.outOfSafeZone(name);
+
+        helper.setFrom("WithMe"); //보내는사람
+        helper.setTo(toEmail); //받는사람
+        helper.setSubject("[WithMe] "+name+"님이 세이프존을 이탈했습니다."); //메일제목
+        helper.setText(mailContent, true); //ture넣을경우 html
+
+        javaMailSender.send(mimeMessage);
+
+    }
 }
