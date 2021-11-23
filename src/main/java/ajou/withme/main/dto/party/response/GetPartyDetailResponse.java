@@ -11,5 +11,5 @@ public class GetPartyDetailResponse {
     private final String code;
 
     private final List<PartyDetailUserResponse> protector;
-    private final List<PartyDetailUserResponse> protectionPerson;
+    private final List<PartyDetailProtectionResponse> protectionPerson;
 }

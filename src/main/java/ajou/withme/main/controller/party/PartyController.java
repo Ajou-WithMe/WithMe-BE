@@ -2,10 +2,12 @@ package ajou.withme.main.controller.party;
 
 import ajou.withme.main.Service.PartyMemberService;
 import ajou.withme.main.Service.PartyService;
+import ajou.withme.main.Service.UserOptionService;
 import ajou.withme.main.Service.UserService;
 import ajou.withme.main.domain.Party;
 import ajou.withme.main.domain.PartyMember;
 import ajou.withme.main.domain.User;
+import ajou.withme.main.domain.UserOption;
 import ajou.withme.main.dto.party.request.CreatePartyRequest;
 import ajou.withme.main.dto.party.request.UpdatePartyRequest;
 import ajou.withme.main.dto.party.response.*;
@@ -29,6 +31,7 @@ public class PartyController {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserService userService;
     private final PartyMemberService partyMemberService;
+    private final UserOptionService userOptionService;
 
     @PostMapping
     @Transactional
@@ -118,7 +121,7 @@ public class PartyController {
 
         // 프로필, 이름, uid, type
         List<PartyDetailUserResponse> protector = new LinkedList<>();
-        List<PartyDetailUserResponse> protectionPerson = new LinkedList<>();
+        List<PartyDetailProtectionResponse> protectionPerson = new LinkedList<>();
 
         for (PartyMember partyMember:
                 allPartyMemberByParty) {
@@ -126,7 +129,8 @@ public class PartyController {
             User curUser = partyMember.getUser();
 
             if (partyMember.getType() == 0) {
-                protectionPerson.add(new PartyDetailUserResponse(curUser.getName(),curUser.getProfileImg(),curUser.getUid(), partyMember.getType()));
+                UserOption userOptionByUser = userOptionService.findUserOptionByUser(curUser);
+                protectionPerson.add(new PartyDetailProtectionResponse(curUser.getName(),curUser.getProfileImg(),curUser.getUid(), partyMember.getType(), userOptionByUser.getSafeMove()));
             } else {
                 protector.add(new PartyDetailUserResponse(curUser.getName(),curUser.getProfileImg(),curUser.getUid(), partyMember.getType()));
             }
