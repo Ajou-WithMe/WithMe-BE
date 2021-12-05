@@ -24,7 +24,7 @@ public class DisconnecteScheduler {
     private final MailService mailService;
     private final PartyMemberService partyMemberService;
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0/15 * * * * ?")
     public void checkDisconnect() throws MessagingException {
 
         System.out.println("---------start DisconnecteScheduler---------");
@@ -35,12 +35,11 @@ public class DisconnecteScheduler {
              all) {
             User user = userOption.getUser();
             List<PartyMember> allPartyMemberByUser = partyMemberService.findAllPartyMemberByUser(user);
-            Party party = allPartyMemberByUser.get(0).getParty();
-            List<PartyMember> allPartyMemberByPartyAndType = partyMemberService.findAllPartyMemberByPartyAndType(party, 1);
-
+            if (allPartyMemberByUser.isEmpty()) {
+                continue;
+            }
 
             Timestamp userNetwork = (Timestamp) userOption.getCurrentNetwork();
-
             Timestamp timestamp = new Timestamp(System.currentTimeMillis() - 1000*60*10);
             boolean isAfter = userNetwork.after(timestamp);
 
@@ -48,6 +47,8 @@ public class DisconnecteScheduler {
                 userOption.setIsDisconnected(1);
                 userOptionService.saveUserOption(userOption);
 //                알림 보내기
+                Party party = allPartyMemberByUser.get(0).getParty();
+                List<PartyMember> allPartyMemberByPartyAndType = partyMemberService.findAllPartyMemberByPartyAndType(party, 1);
                 for (PartyMember partyMember:
                      allPartyMemberByPartyAndType) {
                     User guardian = partyMember.getUser();
