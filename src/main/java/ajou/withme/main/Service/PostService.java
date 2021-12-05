@@ -4,6 +4,8 @@ import ajou.withme.main.Repository.PostRepository;
 import ajou.withme.main.domain.Post;
 import ajou.withme.main.domain.User;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ public class PostService {
 
     }
 
-    public List<Post> findPostAllByLocationState(PageRequest pageRequest, String location, int state) {
+    public Page<Post> findPostAllByLocationState(PageRequest pageRequest, String location, int state) {
         return postRepository.findByLocationAndState(location, state, pageRequest);
     }
 }

@@ -13,14 +13,19 @@ import ajou.withme.main.dto.board.response.*;
 import ajou.withme.main.util.JwtTokenUtil;
 import ajou.withme.main.util.ResFormat;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -145,7 +150,8 @@ public class BoardController {
 
         List<PostPagingResponse> pagingResponses = new LinkedList<>();
 
-        for (Post post : postService.findPostAllByLocationState(pageRequest, location, 0)) {
+        Page<Post> postAllByLocationState = postService.findPostAllByLocationState(pageRequest, location, 0);
+        for (Post post : postAllByLocationState) {
 //            0. id 1.이미지 2.타이틀 3. 마지막 목격장소 4.인상착의 5. createdAt
             PostPagingResponse curPost = new PostPagingResponse(post);
 
@@ -160,8 +166,11 @@ public class BoardController {
 
         }
 
+        Map<String, Object> res = new LinkedHashMap<>();
+        res.put("post", pagingResponses);
+        res.put("page", postAllByLocationState.getTotalPages());
 
-        return new ResFormat(true, 200L, pagingResponses);
+        return new ResFormat(true, 200L, res);
     }
 
     @GetMapping("/my")
