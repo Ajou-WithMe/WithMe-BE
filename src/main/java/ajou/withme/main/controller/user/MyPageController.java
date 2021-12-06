@@ -101,4 +101,12 @@ public class MyPageController {
         return new ResFormat(true, 201L, "휴대폰 번호 변경을 완료했습니다.");
     }
 
+    @DeleteMapping
+    public ResFormat deleteUser(HttpServletRequest request) {
+        String uid = jwtTokenUtil.getSubject(request);
+        User userByUid = userService.findUserByUid(uid);
+        userService.deleteUser(userByUid);
+
+        return new ResFormat(true, 201L, "계정 삭제를 완료했습니다.");
+    }
 }

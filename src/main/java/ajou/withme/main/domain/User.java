@@ -73,6 +73,21 @@ public class User {
         this.pwd = pwd;
     }
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SafeZone> safeZone;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<InitSafeZone> initSafeZone;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ZoneLocation> zoneLocation;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<VisitOften> visitOftens;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PredictionLocation> predictionLocations;
+
     public void updateName(String name) {
         this.name = name;
     }
