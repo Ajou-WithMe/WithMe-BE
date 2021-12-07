@@ -10,6 +10,7 @@ public class ProtectionDetailResponse {
     String name;
     String address;
     String email;
+    int safeMove;
 
     public ProtectionDetailResponse(User userByUid) {
         this.uid = userByUid.getUid();
@@ -17,5 +18,9 @@ public class ProtectionDetailResponse {
         this.name = userByUid.getName();
         this.address = userByUid.getAddress();
         this.email = userByUid.getEmail();
+    }
+
+    public void updateSafemove(int safeMove) {
+        this.safeMove = safeMove;
     }
 }

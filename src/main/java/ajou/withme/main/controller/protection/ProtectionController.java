@@ -46,12 +46,14 @@ public class ProtectionController {
     @GetMapping
     public ResFormat getProtectionDetail(@RequestParam String uid) {
         User userByUid = userService.findUserByUid(uid);
+        UserOption userOptionByUser = userOptionService.findUserOptionByUser(userByUid);
 
         if (userByUid == null) {
             return new ResFormat(false, 400L, "존재하지 않은 uid 입니다.");
         }
 
         ProtectionDetailResponse protectionDetailResponse = new ProtectionDetailResponse(userByUid);
+        protectionDetailResponse.updateSafemove(userOptionByUser.getSafeMove());
 
         return new ResFormat(true, 200L, protectionDetailResponse);
 
