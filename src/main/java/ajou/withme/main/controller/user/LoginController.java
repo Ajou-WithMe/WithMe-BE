@@ -51,6 +51,7 @@ public class LoginController {
             Map<String, Object> res = new LinkedHashMap<>();
             res.put("accessToken", accessToken);
             res.put("type", userByEmail.getType());
+            res.put("uid", userByEmail.getUid());
 
             return new ResFormat(true, 201L, res);
         } else {
