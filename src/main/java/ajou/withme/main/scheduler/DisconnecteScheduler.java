@@ -24,7 +24,7 @@ public class DisconnecteScheduler {
     private final MailService mailService;
     private final PartyMemberService partyMemberService;
 
-    @Scheduled(cron = "0/15 * * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void checkDisconnect() throws MessagingException {
 
         System.out.println("---------start DisconnecteScheduler---------");
