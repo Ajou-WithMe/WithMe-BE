@@ -1,6 +1,6 @@
 # WithMe - BackEnd
 
-[comment]: <> (![title]&#40;./img/panel.jpg&#41;)
+![title](./img/main.png)
 
 ### **[데모영상](https://youtu.be/MaM2q_eAEaI)**
 
@@ -14,9 +14,9 @@
 - **통신두절 시 인사이트 제공**: 10분이상 위치좌표를 못받게 되면 통신 두절 상태로 들어갑니다. 이에 보호자에게 지속적인 알림을 보내며, 마지막 좌표와 속도, 시간을 토대로 최대 이동 반경과, 자주갔던 위치, 예상되는 위치를 안내합니다. 
 - **공동알람 서비스**: 각 지역마다 실종자 게시판을 만들어, 동네 주민이 함께 실종자를 찾는데 기여할 수 있습니다.
 
-[comment]: <> (## 시스템구성도)
+## 시스템구성도
 
-[comment]: <> (![architecture]&#40;./reference/systemArchitecture.jpg&#41;)
+![architecture](./img/archi1.jpg)
 
 ## ERD
 ![erd](./img/erd.png)
